@@ -39,13 +39,13 @@ var userDataSchema = new mongoose.Schema({
   // },
   password: {
     type: String
+  },
+  roles: {
+    type: [String]
+  },
+  active: {
+    type: Boolean
   }
-  // roles: {
-  //   type: [String]
-  // },
-  // active: {
-  //   type: Boolean
-  // },
   // subscriptions: {
   //   type: [Boolean]
   // },
