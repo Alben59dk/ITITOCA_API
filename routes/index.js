@@ -1,17 +1,27 @@
 let express = require('express')
+let router = express.Router()
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 const mongoose = require('mongoose')
 let cors = require('cors')
 
 
-let router = express.Router()
 mongoose.connect('mongodb://localhost:27017/ititoca')
 
 var UserData = require('../models/user');
 var ContentData = require('../models/content');
 
 router.use(cors())
+
+/* GET All users */
+router.get('/users', (req, res) => {
+  UserData.find({},(err, data) => {
+    if(err) return handleError(err)
+    if(data) {
+      return res.send(data)
+    }
+  })
+})
 
 //LOGIN 
 router.post('/login', (req, res, next) => {
@@ -64,26 +74,23 @@ router.post('/login', (req, res, next) => {
 
 //SIGNUP
 router.post('/signup', (req, res) => {
-  let newUser = UserData(req.body)
-  console.log(newUser)
+  var salt = bcrypt.genSaltSync(11)
+  let hash = bcrypt.hashSync(req.body.password, salt)
+  let userInfo = {
+    ...req.body,
+    password: hash
+  }
+  let newUser = UserData(userInfo)
   newUser.save()
 });
-
-/* GET All users */
-router.get('/users', (req, res) => {
-  UserData.find({},(err, data) => {
-    if(err) return handleError(err)
-    if(data) return res.send(data)
-  })
-})
 
 /* DELETE A USER BY ID */
 router.put('/users/:id', (req, res) => {
   console.log('req.body.activeBack: ' + req.body.activeBack)
   UserData.findByIdAndUpdate(req.params.id, {$set: {
-    active: req.body.activeBack
+    active: !req.body.activeBack
   }}, (err) => {
-    if(err) handleError(err)
+    if(err) return handleError(err)
     else res.status(200).end()
   })
 })
