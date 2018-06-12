@@ -46,7 +46,8 @@ router.post('/login', (req, res, next) => {
             //Payload
             {
               email: user[0].email,
-              userId: user[0]._id
+              userId: user[0]._id,
+              roles: user[0].roles
             },
             'secret',
             {
@@ -74,7 +75,7 @@ router.post('/login', (req, res, next) => {
 
 //SIGNUP
 router.post('/signup', (req, res) => {
-  var salt = bcrypt.genSaltSync(11)
+  let salt = bcrypt.genSaltSync(11)
   let hash = bcrypt.hashSync(req.body.password, salt)
   let userInfo = {
     ...req.body,
@@ -85,10 +86,10 @@ router.post('/signup', (req, res) => {
 });
 
 /* DELETE A USER BY ID */
-router.put('/users/:id', (req, res) => {
+router.patch('/users/:id', (req, res) => {
   console.log('req.body.activeBack: ' + req.body.activeBack)
   UserData.findByIdAndUpdate(req.params.id, {$set: {
-    active: !req.body.activeBack
+    active: !this.active
   }}, (err) => {
     if(err) return handleError(err)
     else res.status(200).end()
