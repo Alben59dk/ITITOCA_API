@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 let cors = require('cors')
 
 
-mongoose.connect('mongodb://localhost:27017/ititoca')
+mongoose.connect('mongodb://192.168.1.29:27017/ititoca')
 
 var UserData = require('../models/user');
 var ContentData = require('../models/content');
@@ -23,7 +23,7 @@ router.get('/users', (req, res) => {
   })
 })
 
-//LOGIN 
+//LOGIN
 router.post('/login', (req, res, next) => {
   //Looking through db for user
   UserData.find({email: req.body.email})
@@ -62,7 +62,7 @@ router.post('/login', (req, res, next) => {
           message: "Auth Failed"
         })
       })
-        
+
     })
     .catch(err => {
       console.log(err)
