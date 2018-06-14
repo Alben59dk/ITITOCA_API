@@ -24,6 +24,7 @@ let articleSchema = new mongoose.Schema({
   },
   type: {
     type: String,
+    enum: ['ARTICLE', 'CHALLENGE'],
     default: 'ARTICLE',
     required: true
   },

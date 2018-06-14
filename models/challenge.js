@@ -4,6 +4,7 @@ let ArticleModel = require('./article.js')
 let challengeSchema = new mongoose.Schema({
   type: {
     type: String,
+    enum: ['ARTICLE', 'CHALLENGE'],
     default: 'CHALLENGE',
     required: true
   },
