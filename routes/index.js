@@ -2,21 +2,13 @@ let express = require('express')
 let router = express.Router()
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
-const mongoose = require('mongoose')
-let cors = require('cors')
 
 
-mongoose.connect('mongodb://localhost:27017/ititoca')
 
 var UserData = require('../models/user');
-var ContentData = require('../models/article');
-let ChallengeModel = require('../models/challenge');
-
 
 //Controllers import
 let UserController = require('../controllers/user')
-
-router.use(cors())
 
 /* GET All users */
 router.get('/users', (req, res) => {

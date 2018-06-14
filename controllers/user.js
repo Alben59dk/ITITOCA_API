@@ -3,11 +3,15 @@ let UserModel = require('../models/user')
 class UserController {
     static getUsers(req, res) {
         UserModel.find({},(err, data) => {
-            if(err) return handleError(err)
-            if(data) {
-                console.log(data) 
-                return res.send(data)
+            if(err) {
+                res.status(503).json({
+                    error: err.message
+                })    
+                return
             }
+            if(data) {
+                 res.status(200).json(data)
+            } 
           })
     }
 }

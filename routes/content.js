@@ -1,11 +1,17 @@
 let express = require ('express')
 let ContentController = require('../controllers/content')
-const ArticleRouter = require('./article')
 
+//let challengeRouter = require('./challenge')
+let articleRouter = require('./article')
+
+//ROUTERS
 let ContentRouter = express.Router()
+//ContentRouter.use('/challenge', challengeRouter)
+ContentRouter.use('/article', articleRouter)
 
-ContentRouter.use('/article', ArticleRouter)
-
+/////////////////
+//    ROUTES   //
+/////////////////
 ContentRouter.get('/', (req, res) => {
   ContentController.findAll(res)
 })
