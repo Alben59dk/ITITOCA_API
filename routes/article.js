@@ -26,4 +26,8 @@ ArticleRouter.post('/', imageUpload, (req, res) => {
   }
 })
 
+ArticleRouter.get('/', (req, res) => {
+  ArticleController.findAll(res)
+})
+
 module.exports = ArticleRouter
