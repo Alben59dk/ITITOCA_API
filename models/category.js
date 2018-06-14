@@ -1,6 +1,6 @@
 let mongoose = require('mongoose')
 
-let categorieSchema = new mongoose.Schema({
+let categorySchema = new mongoose.Schema({
   name: {
     type: String,
     unique: true,
@@ -17,6 +17,6 @@ let categorieSchema = new mongoose.Schema({
   }
 })
 
-let CategorieModel = mongoose.model('CategorieModel', categorieSchema, 'categories')
+let CategoryModel = mongoose.model('CategoryModel', categorySchema, 'categories')
 
-module.exports = CategorieModel
+module.exports = CategoryModel

@@ -9,7 +9,7 @@ var indexRouter = require('./routes/index');
 let ChallengeRouter = require('./routes/challenge')
 let articleRouter = require('./routes/article')
 let contentRouter = require('./routes/content')
-let categorieRouter = require('./routes/categorie')
+let categoryRouter = require('./routes/category')
 
 
 
@@ -22,7 +22,7 @@ app.use(cookieParser());
 
 app.use('/', indexRouter);
 app.use('/content', contentRouter)
-app.use('/categorie', categorieRouter)
+app.use('/category', categoryRouter)
 
 
 // catch 404 and forward to error handler

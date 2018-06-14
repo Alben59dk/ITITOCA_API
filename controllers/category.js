@@ -1,9 +1,9 @@
-let CategorieModel = require ('../models/categorie')
+let CategoryModel = require ('../models/category')
 
-class CategorieController {
+class CategoryController {
 
   static findAll(res) {
-    CategorieModel.find({}, (err, result) => {
+    CategoryModel.find({}, (err, result) => {
       if (err) {
         res.status(503).json({
           error: err.message
@@ -19,4 +19,4 @@ class CategorieController {
   }
 }
 
-module.exports = CategorieController
+module.exports = CategoryController

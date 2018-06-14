@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-let CategorieModel = require('./models/categorie')
+let CategorieModel = require('./models/category')
 
 mongoose.connect('mongodb://localhost:27017/ititoca')
 
