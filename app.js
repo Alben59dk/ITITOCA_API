@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
 
 var indexRouter = require('./routes/index');
+let articleRouter = require('./routes/article')
 
 var app = express();
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/', indexRouter);
+app.use('/article', articleRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -22,6 +24,7 @@ app.use(function(req, res, next) {
 })
 
 // error handler
+/*
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
@@ -29,7 +32,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
-});
+  //res.render('error');
+});*/
 
 module.exports = app;
