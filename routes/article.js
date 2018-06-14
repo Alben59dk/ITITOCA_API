@@ -17,7 +17,7 @@ ArticleRouter.post('/', imageUpload, (req, res) => {
       && req.body.description
       && req.body.content
       && req.body.categories
-      && req.file.id) {
+      && req.file && req.file.id) {
     ArticleController.addNew(req.body, req.file.id, res)
   } else {
     res.status(400).json({
