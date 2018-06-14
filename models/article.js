@@ -11,9 +11,8 @@ let articleSchema = new mongoose.Schema({
     required: true
   },
   image: {
-    data: Buffer,
-    contentType: String,
-    required: true
+    type: Buffer,
+    required: false
   },
   description: {
     type: String,
@@ -29,7 +28,7 @@ let articleSchema = new mongoose.Schema({
     required: true
   },
   author_id: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     required: true
   },
   status: {
@@ -39,7 +38,7 @@ let articleSchema = new mongoose.Schema({
     default: 'WAITING_FOR_VALIDATION'
   },
   categories: {
-    type: [Schema.Types.ObjectId],
+    type: [mongoose.Schema.Types.ObjectId],
     required: true
   },
   created_date: {

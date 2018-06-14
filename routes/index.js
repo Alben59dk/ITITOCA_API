@@ -6,32 +6,34 @@ const mongoose = require('mongoose')
 let cors = require('cors')
 
 
-mongoose.connect('mongodb://192.168.1.29:27017/ititoca')
+mongoose.connect('mongodb://localhost:27017/ititoca')
 
 var UserData = require('../models/user');
-var ContentData = require('../models/content');
+var ContentData = require('../models/article');
+let ChallengeModel = require('../models/challenge');
+
+
+//Controllers import
+let UserController = require('../controllers/user')
 
 router.use(cors())
 
 /* GET All users */
 router.get('/users', (req, res) => {
-  UserData.find({},(err, data) => {
-    if(err) return handleError(err)
-    if(data) {
-      return res.send(data)
-    }
-  })
+  UserController.getUsers(req, res)
 })
 
-//LOGIN
+//LOGIN 
 router.post('/login', (req, res, next) => {
   //Looking through db for user
+  console.log(req.body.email)
   UserData.find({email: req.body.email})
     .exec()
     .then(user => {
+      console.log('user: ' + user)
       if (user.length < 1) {
         return res.status(401).json({
-          message: "Auth Failed"
+          message: "Auth Failedd"
         })
       }
       //DECRYPTION
@@ -46,14 +48,14 @@ router.post('/login', (req, res, next) => {
             //Payload
             {
               email: user[0].email,
-              userId: user[0]._id,
-              roles: user[0].roles
+              userId: user[0]._id
             },
             'secret',
             {
               expiresIn: '1h'
             }
           )
+          console.log('pass ok')
           return res.status(200).json({
             message: 'Auth sucessful',
             token: token
@@ -63,7 +65,7 @@ router.post('/login', (req, res, next) => {
           message: "Auth Failed"
         })
       })
-
+        
     })
     .catch(err => {
       console.log(err)
@@ -96,9 +98,11 @@ router.patch('/users/:id', (req, res) => {
   })
 })
 
-// router.post('/content', (req, res) => {
-//   ContentData
-// });
+router.post('/challenge', (req, res) => {
+  let newChallenge = ChallengeModel(req.body)
+  console.log(newChallenge)
+  newChallenge.save()
+});
 
 
 module.exports = router
