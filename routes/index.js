@@ -91,7 +91,7 @@ router.post('/signup', (req, res) => {
 router.patch('/users/:id', (req, res) => {
   console.log('req.body.activeBack: ' + req.body.activeBack)
   UserData.findByIdAndUpdate(req.params.id, {$set: {
-    active: !this.active
+    active: false
   }}, (err) => {
     if(err) return handleError(err)
     else res.status(200).end()
@@ -99,6 +99,7 @@ router.patch('/users/:id', (req, res) => {
 })
 
 router.post('/challenge', (req, res) => {
+  console.log()
   let newChallenge = ChallengeModel(req.body)
   console.log(newChallenge)
   newChallenge.save()

@@ -11,8 +11,8 @@ let articleSchema = new mongoose.Schema({
     required: true
   },
   image: {
-    type: Buffer,
-    required: false
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
   },
   description: {
     type: String,
