@@ -8,6 +8,8 @@ var morgan = require('morgan');
 var indexRouter = require('./routes/index');
 let ChallengeRouter = require('./routes/challenge')
 let articleRouter = require('./routes/article')
+let contentRouter = require('./routes/content')
+
 
 
 var app = express();
@@ -18,7 +20,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/', indexRouter);
-app.use('/article', articleRouter)
+app.use('/content', contentRouter)
 
 
 // catch 404 and forward to error handler
