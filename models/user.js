@@ -18,7 +18,8 @@ let userSchema = new mongoose.Schema({
   roles: {
     type: String,
     required: true,
-    enum: ['JUNIOR_CONTRIBUTOR', 'CONFIRMED_CONTRIBUTOR', 'ADMINISTRATOR']
+    enum: ['JUNIOR_CONTRIBUTOR', 'CONFIRMED_CONTRIBUTOR', 'ADMINISTRATOR'],
+    default: 'JUNIOR_CONTRIBUTOR'
   },
   active: {
     type: Boolean,
