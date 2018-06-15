@@ -26,6 +26,23 @@ class ArticleController {
       }
     })
   }
+
+  static modifyArticle(req, res) {
+    ArticleModel.findByIdAndUpdate(req.params.id, req.body, 
+      {new: true}, (err, doc) => {
+        if (err) {
+          res.status(503).json({
+            error: err.message
+          })
+          return
+        }
+        if (doc) {
+          res.status(200).json(doc)
+        } else {
+          res.status(204).json({})
+        }
+    })
+  }
 }
 
 module.exports = ArticleController

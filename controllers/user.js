@@ -77,6 +77,43 @@ class UserController {
         let newUser = UserData(userInfo)
         newUser.save()
     }
+
+    static disableUser(id, res) {
+        UserModel.findByIdAndUpdate(id, {
+            active: false
+        }, { new:  true }, (err, doc) => {
+            if(err) {
+                res.status(503).json({
+                    error: err.message
+                })
+                return 
+            }
+            if (doc) {
+                res.status(201).json(doc)
+            } else {
+                res.status(204).json({})
+            }
+        })
+    }
+
+    static activateUser(id, res) {
+        console.log(id)
+        UserModel.findByIdAndUpdate(id, {
+            active: true
+        }, { new:  true }, (err, doc) => {
+            if(err) {
+                res.status(503).json({
+                    error: err.message
+                })
+                return 
+            }
+            if (doc) {
+                res.status(201).json(doc)
+            } else {
+                res.status(204).json({})
+            }
+        })
+    }
 }
 
 module.exports = UserController
