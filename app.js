@@ -1,29 +1,33 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
+let createError = require('http-errors');
+let express = require('express');
+let path = require('path');
 let bodyParser = require('body-parser')
-var cookieParser = require('cookie-parser');
-var morgan = require('morgan');
+let cookieParser = require('cookie-parser');
+let morgan = require('morgan')
+let cors = require('cors')
+const mongoose = require('mongoose')
 
-var indexRouter = require('./routes/index');
-let ChallengeRouter = require('./routes/challenge')
-let articleRouter = require('./routes/article')
+
+let userRouter = require('./routes/user');
 let contentRouter = require('./routes/content')
 let categoryRouter = require('./routes/category')
 
+let app = express();
+app.use(cors())
+
+mongoose.connect('mongodb://localhost:27017/ititoca')
 
 
-var app = express();
 
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/', indexRouter);
+//ROUTER PREFIX
+app.use('/user', userRouter);
 app.use('/content', contentRouter)
 app.use('/category', categoryRouter)
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

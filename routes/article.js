@@ -1,6 +1,8 @@
 let express = require ('express')
 let multer = require('multer')
 let multerGridfsStorage = require('multer-gridfs-storage')
+
+
 let ArticleController = require('../controllers/article')
 
 const storage = multerGridfsStorage({
@@ -12,6 +14,7 @@ const upload = multer({storage: storage})
 let ArticleRouter = express.Router()
 
 const imageUpload = upload.single('image')
+
 ArticleRouter.post('/', imageUpload, (req, res) => {
   if (req.body.title
       && req.body.description
@@ -25,5 +28,11 @@ ArticleRouter.post('/', imageUpload, (req, res) => {
     })
   }
 })
+
+ArticleRouter.put('/:id', (req, res) => {
+  ArticleController.modifyArticle(req, res)
+})
+
+
 
 module.exports = ArticleRouter
