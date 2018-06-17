@@ -23,7 +23,31 @@ describe('**********USERS***********', function () {
                 done()
             })
     })
-    it('/user/admin (POST) - Should return a 200 response')
+    it('/user/delete/:pseudo (DELETE) - Should return a 200 response', function(done) {
+        chai.request(server)
+            .delete('/user/delete/test')
+            .end((err, res) => {
+                res.should.have.status(200)
+                res.should.be.json
+            })
+            done()
+    })
+    it('/user/admin (POST) - Should return a 200 response', function(done) {
+        let body = {
+            pseudo: 'test',
+            email: 'test@test.fr',
+            password: 'test'
+        }
+        chai.request(server)
+            .post('/user/admin')
+            .send(body)
+            .end((err, res) => {
+                res.should.have.status(200)
+                res.should.be.json
+            })
+            done()
+
+    })
     it('/user/signup (POST) - Should return a 200 response')
     it('/user/login (POST) - Should return a 200 response')
     it('/user/disable/:id (POST) - Should return a 200 response')

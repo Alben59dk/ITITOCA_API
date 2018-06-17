@@ -75,7 +75,14 @@ class UserController {
           password: hash
         }
         let newUser = UserModel(userInfo)
-        newUser.save()
+        newUser.save(function (err, updatedTank) {
+            if (err) console.log('Error saving User...') 
+            else { 
+                res.status(200).json({
+                    message: 'User saved!'
+                })
+            }
+        })
     }
 
     static disableUser(id, res) {
@@ -111,6 +118,16 @@ class UserController {
                 res.status(201).json(doc)
             } else {
                 res.status(204).json({})
+            }
+        })
+    }
+
+    static deleteUser(pseudo, res) {
+        UserModel.findOneAndDelete({pseudo: pseudo}, (err, doc) => {
+            if (err) {
+                handleError(err)
+            } else {
+                return res.status(200).json(doc)
             }
         })
     }
