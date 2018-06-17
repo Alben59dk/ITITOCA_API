@@ -74,7 +74,7 @@ class UserController {
           ...req.body,
           password: hash
         }
-        let newUser = UserData(userInfo)
+        let newUser = UserModel(userInfo)
         newUser.save()
     }
 

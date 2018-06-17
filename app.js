@@ -19,7 +19,7 @@ mongoose.connect('mongodb://localhost:27017/ititoca')
 
 
 
-app.use(morgan('dev'));
+if(process.env.NODE_ENV !== 'test'){app.use(morgan('dev'))};
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
