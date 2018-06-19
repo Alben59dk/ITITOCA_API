@@ -16,6 +16,10 @@ ContentRouter.get('/', (req, res) => {
   ContentController.findAll(res)
 })
 
+ ContentRouter.get('/:id', (req, res) => {
+  ContentController.findOneContent(req.params.id, res)
+})
+
 ContentRouter.post('/publish/:id', (req, res) => {
   ContentController.publishOneContent(req.params.id, res)
 })
