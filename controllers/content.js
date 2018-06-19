@@ -18,6 +18,22 @@ class ContentController {
     })
   }
 
+  static findOneContent (id, res) {
+    ArticleModel.findById(id, (err, result) => {
+      if (err) {
+        res.status(503).json({
+          error: err.message
+        })
+        return
+      }
+      if (result) {
+        res.status(200).json(result)
+      } else {
+        res.status(200).json([])
+      }
+    })
+  }
+
   static publishOneContent(id, res) {
     ArticleModel.findByIdAndUpdate(id, {
       status: 'PUBLISHED'
