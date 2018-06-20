@@ -1,13 +1,14 @@
-let ArticleModel = require ('../models/article')
-let slug = require('slug')
+const ArticleModel = require ('../models/article')
+const slug = require('slug')
+const fs = require('fs')
 
 class ArticleController {
 
-  static addNew (params, imageId, res) {
+  static addNew (params, image, res) {
     let article = new ArticleModel({
       title: params.title,
       technical_name: slug(params.title),
-      image: imageId,
+      image: image.path,
       description: params.description,
       content: params.content,
       type: 'ARTICLE',
@@ -16,19 +17,46 @@ class ArticleController {
       categories: params.categories
     })
 
-    article.save((err, obj) => {
-      if (err) {
+    article.save((errS, obj) => {
+      if (errS) {
+        fs.unlink(image.path, (errU) => {
+          if (errU) {
+            res.status(503).json({
+              error: errU.message
+            })
+          }
+          console.log(image.path + ' was deleted');
+        });
         res.status(503).json({
-          error: err.message
+          error: errS.message
         })
       } else {
-        res.status(201).json(obj)
+        let opts = [
+          { path: 'categories'},
+          { path: 'author_id', select: '-password'}
+        ]
+        ArticleModel.populate(obj, opts, (errP, obj) => {
+          if (errP) {
+            res.status(503).json({
+              error: errP.message
+            })
+          } else {
+            res.status(201).json(obj)
+          }
+        })
       }
     })
   }
 
-  static modifyArticle(req, res) {
-    ArticleModel.findByIdAndUpdate(req.params.id, req.body, 
+  static modifyOne(req, res) {
+    let article = req.body
+    if (req.file !== undefined && req.file.path !== undefined && req.file.path.length > 0) {
+      article.image = req.file.path
+    }
+    article.technical_name = slug(article.title)
+    article.last_update_date = Date.now()
+
+    ArticleModel.findByIdAndUpdate(req.params.id, article,
       {new: true}, (err, doc) => {
         if (err) {
           res.status(503).json({
@@ -37,7 +65,19 @@ class ArticleController {
           return
         }
         if (doc) {
-          res.status(200).json(doc)
+          let opts = [
+            { path: 'categories'},
+            { path: 'author_id', select: '-password'}
+          ]
+          ArticleModel.populate(doc, opts, (err, obj) => {
+            if (err) {
+              res.status(503).json({
+                error: err.message
+              })
+            } else {
+              res.status(201).json(obj)
+            }
+          })
         } else {
           res.status(204).json({})
         }

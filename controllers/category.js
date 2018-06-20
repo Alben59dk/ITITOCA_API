@@ -1,4 +1,5 @@
-let CategoryModel = require ('../models/category')
+const CategoryModel = require ('../models/category')
+const fs = require('fs')
 
 class CategoryController {
 
@@ -14,6 +15,33 @@ class CategoryController {
         res.status(200).json(result)
       } else {
         res.status(200).json([])
+      }
+    })
+  }
+
+
+  static addNew(params, image, res) {
+    let category = new CategoryModel({
+      name: params.name,
+      type: params.type,
+      image: image.path
+    })
+
+    category.save((errS, obj) => {
+      if (errS) {
+        fs.unlink(image.path, (errU) => {
+          if (errU) {
+            res.status(503).json({
+              error: errU.message
+            })
+          }
+          console.log(image.path + ' was deleted');
+        });
+        res.status(503).json({
+          error: errS.message
+        })
+      } else {
+        res.status(201).json(obj)
       }
     })
   }

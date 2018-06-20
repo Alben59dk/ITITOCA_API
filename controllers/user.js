@@ -1,7 +1,7 @@
-var bcrypt = require('bcrypt')
-var jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
-let UserModel = require('../models/user')
+const UserModel = require('../models/user')
 
 class UserController {
 

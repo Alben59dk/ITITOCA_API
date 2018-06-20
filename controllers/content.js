@@ -1,9 +1,18 @@
-let ArticleModel = require ('../models/article')
+const ArticleModel = require ('../models/article')
 
 class ContentController {
 
-  static findAll(res) {
-    ArticleModel.find({}, (err, result) => {
+  static findAll(req, res) {
+    let contentPerPage = 10
+    let page = req.query.page || 1
+
+    ArticleModel.find({})
+    .skip((contentPerPage * page) - contentPerPage)
+    .limit(contentPerPage)
+    .populate('author_id', '-password')
+    .populate('categories')
+    .sort('-last_update_date')
+    .exec(function (err, result) {
       if (err) {
         res.status(503).json({
           error: err.message
@@ -18,26 +27,33 @@ class ContentController {
     })
   }
 
-  static findOneContent (id, res) {
-    ArticleModel.findById(id, (err, result) => {
+  static findOne (id, res) {
+    ArticleModel.findById(id)
+    .populate('categories')
+    .populate('author_id', '-password')
+    .exec(function (err, article) {
       if (err) {
         res.status(503).json({
           error: err.message
         })
         return
       }
-      if (result) {
-        res.status(200).json(result)
+      if (article) {
+        res.status(200).json(article)
       } else {
         res.status(200).json([])
       }
     })
   }
 
-  static publishOneContent(id, res) {
+  static publishOne(id, res) {
     ArticleModel.findByIdAndUpdate(id, {
-      status: 'PUBLISHED'
-    }, { new: true }, (err, doc) => {
+      status: 'PUBLISHED',
+      last_update_date: Date.now()
+    }, { new: true })
+    .populate('categories')
+    .populate('author_id', '-password')
+    .exec(function (err, doc) {
       if (err) {
         res.status(503).json({
           error: err.message
@@ -52,10 +68,14 @@ class ContentController {
     })
   }
 
-  static archiveOneContent(id, res) {
+  static archiveOne(id, res) {
     ArticleModel.findByIdAndUpdate(id, {
-      status: 'ARCHIVED'
-    }, { new: true }, (err, doc) => {
+      status: 'ARCHIVED',
+      last_update_date: Date.now()
+    }, { new: true })
+    .populate('categories')
+    .populate('author_id', '-password')
+    .exec(function (err, doc) {
       if (err) {
         res.status(503).json({
           error: err.message

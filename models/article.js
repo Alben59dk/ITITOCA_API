@@ -1,4 +1,4 @@
-let mongoose = require('mongoose')
+const mongoose = require('mongoose')
 
 let articleSchema = new mongoose.Schema({
   title: {
@@ -7,11 +7,11 @@ let articleSchema = new mongoose.Schema({
   },
   technical_name: {
     type: String,
-    unique: true,
-    required: true
+    required: true,
+    unique: true
   },
   image: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     required: true
   },
   description: {
@@ -30,7 +30,8 @@ let articleSchema = new mongoose.Schema({
   },
   author_id: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true
+    required: true,
+    ref: 'UserModel'
   },
   status: {
     type: String,
@@ -38,10 +39,11 @@ let articleSchema = new mongoose.Schema({
     required: true,
     default: 'WAITING_FOR_VALIDATION'
   },
-  categories: {
-    type: [mongoose.Schema.Types.ObjectId],
-    required: true
-  },
+  categories: [{
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'CategoryModel'
+  }],
   created_date: {
     type: Date,
     default: Date.now
