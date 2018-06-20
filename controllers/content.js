@@ -2,8 +2,14 @@ let ArticleModel = require ('../models/article')
 
 class ContentController {
 
-  static findAll(res) {
-    ArticleModel.find({}, (err, result) => {
+  static findAll(req, res) {
+    let contentPerPage = 10
+    let page = req.query.page || 1
+
+    ArticleModel.find({})
+    .skip((contentPerPage * page) - contentPerPage)
+    .limit(contentPerPage)
+    .exec(function (err, result) {
       if (err) {
         res.status(503).json({
           error: err.message

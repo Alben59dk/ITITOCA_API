@@ -14,7 +14,7 @@ ContentRouter.use('/article', articleRouter)
 //    ROUTES   //
 /////////////////
 ContentRouter.get('/', (req, res) => {
-  ContentController.findAll(res)
+  ContentController.findAll(req, res)
 })
 
  ContentRouter.get('/:id', (req, res) => {
