@@ -12,7 +12,7 @@ let categorySchema = new mongoose.Schema({
     required: true
   },
   image: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     required: true
   }
 })
