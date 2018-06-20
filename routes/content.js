@@ -1,12 +1,13 @@
 let express = require ('express')
 let ContentController = require('../controllers/content')
 
-//let challengeRouter = require('./challenge')
-let articleRouter = require('./article')
+const challengeRouter = require('./challenge')
+const articleRouter = require('./article')
 
 //ROUTERS
-let ContentRouter = express.Router()
-//ContentRouter.use('/challenge', challengeRouter)
+const ContentRouter = express.Router()
+
+ContentRouter.use('/challenge', challengeRouter)
 ContentRouter.use('/article', articleRouter)
 
 /////////////////
