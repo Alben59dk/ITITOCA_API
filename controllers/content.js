@@ -24,16 +24,17 @@ class ContentController {
     })
   }
 
-  static findOneContent (id, res) {
-    ArticleModel.findById(id, (err, result) => {
+  static findOne (id, res) {
+    ArticleModel.findById(id)
+    .exec(function (err, article) {
       if (err) {
         res.status(503).json({
           error: err.message
         })
         return
       }
-      if (result) {
-        res.status(200).json(result)
+      if (article) {
+        res.status(200).json(article)
       } else {
         res.status(200).json([])
       }
