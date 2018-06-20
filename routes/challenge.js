@@ -32,7 +32,7 @@ ChallengeRouter.post('/', imageUpload, (req, res) => {
 ChallengeRouter.post('/:id', (req, res) => {
   if (req.body.type === 'PARTICIPATION') {
     if (req.body.message && req.body.author && req.body.content_id) {
-      ParticipationController.addNew(req.body)
+      ParticipationController.addNew(req.body, res)
     }
   } else {
     res.status(400).json({

@@ -7,11 +7,13 @@ let participationSchema = new mongoose.Schema({
   },
   author_id: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true
+    required: true,
+    ref: 'UserModel'
   },
   content_id: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true
+    required: true,
+    ref: 'ChallengeModel'
   },
   creation_date: {
     type: Date,
