@@ -26,7 +26,7 @@ ContentRouter.post('/publish/:id', (req, res) => {
 })
 
 ContentRouter.post('/archive/:id', (req, res) => {
-  ContentController.archiveOneContent(req.params.id, res)
+  ContentController.archiveOne(req.params.id, res)
 })
 
 module.exports = ContentRouter

@@ -59,7 +59,7 @@ class ContentController {
     })
   }
 
-  static archiveOneContent(id, res) {
+  static archiveOne(id, res) {
     ArticleModel.findByIdAndUpdate(id, {
       status: 'ARCHIVED'
     }, { new: true }, (err, doc) => {
