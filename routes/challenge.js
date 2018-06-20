@@ -41,4 +41,8 @@ ChallengeRouter.post('/:id', (req, res) => {
   }
 })
 
+ChallengeRouter.get('/ofthemonth', (req, res) => {
+  ChallengeController.getChallengeOfTheMonth(res)
+})
+
 module.exports = ChallengeRouter

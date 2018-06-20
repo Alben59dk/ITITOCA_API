@@ -84,6 +84,30 @@ class ChallengeController {
           }
         })
   }
+
+  static getChallengeOfTheMonth(res) {
+    ChallengeModel.find({
+      end_of_participation_date: { $gte: Date.now() },
+      status: 'PUBLISHED'
+    })
+    .sort('-last_update_date')
+    .populate('categories')
+    .populate('author_id', '-password')
+    .limit(3)
+    .exec(function (err, result) {
+      if (err) {
+        res.status(503).json({
+          error: err.message
+        })
+        return
+      }
+      if (result) {
+        res.status(200).json(result)
+      } else {
+        res.status(200).json([])
+      }
+    })
+  }
 }
 
 module.exports = ChallengeController
