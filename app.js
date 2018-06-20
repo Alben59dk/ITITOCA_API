@@ -1,25 +1,23 @@
-let createError = require('http-errors');
-let express = require('express');
-let path = require('path');
-let bodyParser = require('body-parser')
-let cookieParser = require('cookie-parser');
-let morgan = require('morgan')
-let cors = require('cors')
+const createError = require('http-errors');
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const morgan = require('morgan')
+const cors = require('cors')
 const mongoose = require('mongoose')
 
 
-let userRouter = require('./routes/user');
-let contentRouter = require('./routes/content')
-let categoryRouter = require('./routes/category')
+const userRouter = require('./routes/user');
+const contentRouter = require('./routes/content')
+const categoryRouter = require('./routes/category')
 
 let app = express();
 app.use(cors())
 
 mongoose.connect('mongodb://localhost:27017/ititoca')
 
-
-
-if(process.env.NODE_ENV !== 'test'){app.use(morgan('dev'))};
+if(process.env.NODE_ENV !== 'test') {
+  app.use(morgan('dev'))
+}
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

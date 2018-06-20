@@ -1,9 +1,9 @@
-let express = require('express')
-let ChallengeRouter = express.Router()
+const express = require('express')
 const ChallengeController = require('../controllers/challenge')
 const ParticipationController = require('../controllers/participation')
 const createUpload = require('../config')
 
+const ChallengeRouter = express.Router()
 
 const imageUpload = createUpload('public/images/challenges').single('image')
 

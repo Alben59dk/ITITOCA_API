@@ -1,4 +1,4 @@
-let express = require ('express')
+const express = require ('express')
 const ArticleController = require('../controllers/article')
 const createUpload = require('../config')
 

@@ -1,6 +1,5 @@
-let express = require ('express')
-let ContentController = require('../controllers/content')
-
+const express = require ('express')
+const ContentController = require('../controllers/content')
 const challengeRouter = require('./challenge')
 const articleRouter = require('./article')
 
