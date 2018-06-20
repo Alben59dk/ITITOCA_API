@@ -9,6 +9,8 @@ class ContentController {
     ArticleModel.find({})
     .skip((contentPerPage * page) - contentPerPage)
     .limit(contentPerPage)
+    .populate('author_id', '-password')
+    .populate('categories')
     .exec(function (err, result) {
       if (err) {
         res.status(503).json({
@@ -26,6 +28,8 @@ class ContentController {
 
   static findOne (id, res) {
     ArticleModel.findById(id)
+    .populate('categories')
+    .populate('author_id', '-password')
     .exec(function (err, article) {
       if (err) {
         res.status(503).json({
@@ -43,8 +47,11 @@ class ContentController {
 
   static publishOne(id, res) {
     ArticleModel.findByIdAndUpdate(id, {
-      status: 'PUBLISHED'
-    }, { new: true }, (err, doc) => {
+      status: 'PUBLISHED',
+    }, { new: true })
+    .populate('categories')
+    .populate('author_id', '-password')
+    .exec(function (err, doc) {
       if (err) {
         res.status(503).json({
           error: err.message
@@ -61,8 +68,11 @@ class ContentController {
 
   static archiveOne(id, res) {
     ArticleModel.findByIdAndUpdate(id, {
-      status: 'ARCHIVED'
-    }, { new: true }, (err, doc) => {
+      status: 'ARCHIVED',
+    }, { new: true })
+    .populate('categories')
+    .populate('author_id', '-password')
+    .exec(function (err, doc) {
       if (err) {
         res.status(503).json({
           error: err.message
