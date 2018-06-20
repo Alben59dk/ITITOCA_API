@@ -35,6 +35,43 @@ class ChallengeController {
       } else {
             res.status(201).json(obj)
       }
-}    })
     })
   }
+
+  static modifyOne(req, res) {
+    let challenge = req.body
+    if (req.file !== undefined && req.file.path !== undefined && req.file.path.length > 0) {
+      challenge.image = req.file.path
+    }
+    challenge.technical_name = slug(challenge.title)
+
+    ChallengeModel.findByIdAndUpdate(req.params.id, challenge,
+        {new: true}, (err, doc) => {
+          if (err) {
+            res.status(503).json({
+              error: err.message
+            })
+            return
+          }
+          if (doc) {
+            let opts = [
+              { path: 'categories'},
+              { path: 'author_id', select: '-password'}
+            ]
+            ChallengeModel.populate(doc, opts, (err, obj) => {
+              if (err) {
+                res.status(503).json({
+                  error: err.message
+                })
+              } else {
+                res.status(201).json(obj)
+              }
+            })
+          } else {
+            res.status(204).json({})
+          }
+        })
+  }
+}
+
+module.exports = ChallengeController

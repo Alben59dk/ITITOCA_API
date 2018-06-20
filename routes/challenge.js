@@ -6,7 +6,11 @@ const createUpload = require('../config')
 
 const imageUpload = createUpload('public/images/challenges').single('image')
 
+// Modify one challenge
 ChallengeRouter.put('/:id', (req, res) => {
+    ChallengeController.modifyOne(req, res)
+})
+
 // Add a new challenge
 ChallengeRouter.post('/', imageUpload, (req, res) => {
   if (req.body.title
