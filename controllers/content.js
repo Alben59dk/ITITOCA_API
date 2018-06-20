@@ -11,6 +11,7 @@ class ContentController {
     .limit(contentPerPage)
     .populate('author_id', '-password')
     .populate('categories')
+    .sort('-last_update_date')
     .exec(function (err, result) {
       if (err) {
         res.status(503).json({
