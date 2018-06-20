@@ -33,7 +33,19 @@ class ChallengeController {
           error: errS.message
         })
       } else {
+        let opts = [
+          { path: 'categories'},
+          { path: 'author_id', select: '-password'}
+        ]
+        ChallengeModel.populate(obj, opts, (errP, obj) => {
+          if (errP) {
+            res.status(503).json({
+              error: errP.message
+            })
+          } else {
             res.status(201).json(obj)
+          }
+        })
       }
     })
   }
