@@ -7,11 +7,11 @@ let articleSchema = new mongoose.Schema({
   },
   technical_name: {
     type: String,
-    unique: true,
-    required: true
+    required: true,
+    unique: true
   },
   image: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     required: true
   },
   description: {

@@ -24,6 +24,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// Serve public files
+app.use('/public', express.static('public'));
+
 //ROUTER PREFIX
 app.use('/user', userRouter);
 app.use('/content', contentRouter)
