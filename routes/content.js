@@ -28,4 +28,9 @@ ContentRouter.post('/archive/:id', (req, res) => {
   ContentController.archiveOne(req.params.id, res)
 })
 
+// Get all published contents
+ContentRouter.get('/published', (req, res) => {
+  ContentController.publishedOnes(req, res)
+})
+
 module.exports = ContentRouter
