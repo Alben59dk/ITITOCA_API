@@ -15,7 +15,7 @@ let categorySchema = new mongoose.Schema({
     type: String,
     required: true
   }
-})
+},{ _id: false})
 
 let CategoryModel = mongoose.model('CategoryModel', categorySchema, 'categories')
 
