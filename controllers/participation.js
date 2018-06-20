@@ -15,8 +15,24 @@ class ParticipationController {
         res.status(503).json({
           error: errS.message
         })
+        return
+      }
+      if (obj) {
+        let opts = [
+          { path: 'content_id'},
+          { path: 'author_id', select: '-password'}
+        ]
+        ParticipationModel.populate(obj, opts, (errP, obj) => {
+          if (errP) {
+            res.status(503).json({
+              error: errP.message
+            })
+          } else {
+            res.status(201).json(obj)
+          }
+        })
       } else {
-        res.status(201).json(obj)
+        res.status(204).json({})
       }
     })
   }

@@ -89,6 +89,33 @@ class ContentController {
       }
     })
   }
+
+  static publishedOnes(req, res) {
+    let contentPerPage = 10
+    let page = req.query.page || 1
+
+    ArticleModel.find({
+      status: 'PUBLISHED'
+    })
+    .skip((contentPerPage * page) - contentPerPage)
+    .limit(contentPerPage)
+    .populate('author_id', '-password')
+    .populate('categories')
+    .sort('-last_update_date')
+    .exec(function (err, doc) {
+      if (err) {
+        res.status(503).json({
+          error: err.message
+        })
+        return
+      }
+      if (doc) {
+        res.status(200).json(doc)
+      } else {
+        res.status(204).json({})
+      }
+    })
+  }
 }
 
 module.exports = ContentController
