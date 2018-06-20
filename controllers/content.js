@@ -49,6 +49,7 @@ class ContentController {
   static publishOne(id, res) {
     ArticleModel.findByIdAndUpdate(id, {
       status: 'PUBLISHED',
+      last_update_date: Date.now()
     }, { new: true })
     .populate('categories')
     .populate('author_id', '-password')
@@ -70,6 +71,7 @@ class ContentController {
   static archiveOne(id, res) {
     ArticleModel.findByIdAndUpdate(id, {
       status: 'ARCHIVED',
+      last_update_date: Date.now()
     }, { new: true })
     .populate('categories')
     .populate('author_id', '-password')
