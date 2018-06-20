@@ -18,4 +18,5 @@ let challengeSchema = new mongoose.Schema({
 })
 
 let ChallengeModel = ArticleModel.discriminator('ChallengeModel', challengeSchema)
+
 module.exports = ChallengeModel
