@@ -1,8 +1,8 @@
-let express = require ('express')
-let CategoryController = require('../controllers/category')
+const express = require ('express')
+const CategoryController = require('../controllers/category')
 const createUpload = require('../config')
 
-let CategoryRouter = express.Router()
+const CategoryRouter = express.Router()
 
 const imageUpload = createUpload('public/images/categories').single('image')
 

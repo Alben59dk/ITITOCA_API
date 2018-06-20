@@ -2,7 +2,7 @@ const express = require ('express')
 const ArticleController = require('../controllers/article')
 const createUpload = require('../config')
 
-let ArticleRouter = express.Router()
+const ArticleRouter = express.Router()
 
 const imageUpload = createUpload('public/images/articles').single('image')
 

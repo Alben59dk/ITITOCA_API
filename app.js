@@ -5,17 +5,16 @@ const morgan = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
 
-
 const userRouter = require('./routes/user');
 const contentRouter = require('./routes/content')
 const categoryRouter = require('./routes/category')
 
-let app = express();
+const app = express();
 app.use(cors())
 
 mongoose.connect('mongodb://localhost:27017/ititoca')
 
-if(process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('dev'))
 }
 app.use(express.json());

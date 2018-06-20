@@ -1,5 +1,5 @@
-let ArticleModel = require ('../models/article')
-let slug = require('slug')
+const ArticleModel = require ('../models/article')
+const slug = require('slug')
 const fs = require('fs')
 
 class ArticleController {

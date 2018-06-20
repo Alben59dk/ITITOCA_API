@@ -1,5 +1,5 @@
-let mongoose = require('mongoose')
-let ArticleModel = require('./article.js')
+const mongoose = require('mongoose')
+const ArticleModel = require('./article.js')
 
 let challengeSchema = new mongoose.Schema({
   type: {

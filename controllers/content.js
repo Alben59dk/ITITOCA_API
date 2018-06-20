@@ -1,4 +1,4 @@
-let ArticleModel = require ('../models/article')
+const ArticleModel = require ('../models/article')
 
 class ContentController {
 

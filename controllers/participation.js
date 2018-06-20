@@ -1,4 +1,4 @@
-let ParticipationModel = require ('../models/participation')
+const ParticipationModel = require ('../models/participation')
 
 class ParticipationController {
 
