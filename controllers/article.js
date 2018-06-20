@@ -31,7 +31,19 @@ class ArticleController {
           error: errS.message
         })
       } else {
-        res.status(201).json(obj)
+        let opts = [
+          { path: 'categories'},
+          { path: 'author_id', select: '-password'}
+        ]
+        ArticleModel.populate(obj, opts, (errP, obj) => {
+          if (errP) {
+            res.status(503).json({
+              error: errP.message
+            })
+          } else {
+            res.status(201).json(obj)
+          }
+        })
       }
     })
   }
@@ -53,7 +65,19 @@ class ArticleController {
           return
         }
         if (doc) {
-          res.status(200).json(doc)
+          let opts = [
+            { path: 'categories'},
+            { path: 'author_id', select: '-password'}
+          ]
+          ArticleModel.populate(doc, opts, (err, obj) => {
+            if (err) {
+              res.status(503).json({
+                error: err.message
+              })
+            } else {
+              res.status(201).json(obj)
+            }
+          })
         } else {
           res.status(204).json({})
         }
