@@ -22,7 +22,7 @@ ContentRouter.get('/', (req, res) => {
 })
 
 ContentRouter.post('/publish/:id', (req, res) => {
-  ContentController.publishOneContent(req.params.id, res)
+  ContentController.publishOne(req.params.id, res)
 })
 
 ContentRouter.post('/archive/:id', (req, res) => {

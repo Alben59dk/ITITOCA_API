@@ -41,7 +41,7 @@ class ContentController {
     })
   }
 
-  static publishOneContent(id, res) {
+  static publishOne(id, res) {
     ArticleModel.findByIdAndUpdate(id, {
       status: 'PUBLISHED'
     }, { new: true }, (err, doc) => {
