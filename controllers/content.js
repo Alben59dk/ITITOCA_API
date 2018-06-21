@@ -1,4 +1,5 @@
 const ArticleModel = require ('../models/article')
+const ObjectId = require('mongoose').Types.ObjectId;
 
 class ContentController {
 
@@ -113,6 +114,39 @@ class ContentController {
         res.status(200).json(doc)
       } else {
         res.status(204).json({})
+      }
+    })
+  }
+
+  static findFiltered(req, res) {
+    let contentPerPage = 10
+    let page = req.query.page || 1
+    let filters = [ new ObjectId(req.params.categoryId) ]
+
+    if (req.params.timeId !== undefined && req.params.timeId.length > 0) {
+      filters.push(new ObjectId(req.params.timeId))
+    }
+
+    ArticleModel.find({
+      categories: { $all: filters },
+      status: 'PUBLISHED'
+    })
+    .skip((contentPerPage * page) - contentPerPage)
+    .limit(contentPerPage)
+    .populate('author_id', '-password')
+    .populate('categories')
+    .sort('-last_update_date')
+    .exec(function (err, result) {
+      if (err) {
+        res.status(503).json({
+          error: err.message
+        })
+        return
+      }
+      if (result) {
+        res.status(200).json(result)
+      } else {
+        res.status(200).json([])
       }
     })
   }

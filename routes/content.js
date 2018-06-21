@@ -33,4 +33,8 @@ ContentRouter.get('/published', (req, res) => {
   ContentController.publishedOnes(req, res)
 })
 
+ContentRouter.get('/filter/:categoryId/:timeId*?', (req, res) => {
+  ContentController.findFiltered(req, res)
+})
+
 module.exports = ContentRouter

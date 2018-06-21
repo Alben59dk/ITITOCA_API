@@ -8,7 +8,7 @@ const ChallengeRouter = express.Router()
 const imageUpload = createUpload('public/images/challenges').single('image')
 
 // Modify one challenge
-ChallengeRouter.put('/:id', (req, res) => {
+ChallengeRouter.put('/:id', imageUpload, (req, res) => {
     ChallengeController.modifyOne(req, res)
 })
 
