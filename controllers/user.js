@@ -23,51 +23,50 @@ class UserController {
     }
 
     static login(req, res) {
-        console.log(req.body)
-        UserModel.find({email: req.body.email})
-        .exec()
-        .then(user => {
-            if (user.length < 1) {
-                return res.status(401).json({
-                    message: "Auth Failedd"
-                })
-            }
-            //DECRYPTION
-            bcrypt.compare(req.body.password, user[0].password, (err, result) => {
-            if(err) {
-                return res.status(401).json({
-                    message: "Auth Failed"
-                })
-            }
-            if(result) {
-                const token = jwt.sign(
-                    //Payload
-                    {
-                        email: user[0].email,
-                        userId: user[0]._id
-                    },
-                    'secret',
-                    {
-                        expiresIn: '1h'
-                    }
-                )
-                console.log('pass ok')
-                return res.status(200).json({
-                    message: 'Auth sucessful',
-                    token: token
-                })
-            }
+      UserModel.find({
+        email: req.body.email
+      })
+      .exec()
+      .then(user => {
+        if (user.length < 1) {
+          return res.status(401).json({
+            message: "Auth Failed : email not found"
+          })
+        }
+        bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+          if (err) {
             res.status(401).json({
-                message: "Auth Failed"
-                })
+              message: "Auth Failed : wrong password"
             })
-            
-        })
-        .catch(err => {
-            res.status(500).json({
-            error: err
+            return
+          }
+          if (result) {
+            const token = jwt.sign(
+                {
+                  email: user[0].email,
+                  userId: user[0]._id,
+                  role: user[0].roles,
+                },
+                '1T1T0C4_S3CR3T',
+                {
+                  expiresIn: '1h'
+                }
+              )
+            res.status(200).json({
+                token: token
             })
+            return
+          }
+          res.status(401).json({
+            message: "Auth Failed"
+          })
         })
+      })
+      .catch(err => {
+          res.status(503).json({
+            error: err.message
+          })
+      })
     }
 
     static addAdmin(req, res) {
