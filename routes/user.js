@@ -6,7 +6,7 @@ const UserController = require('../controllers/user')
 
 //Get all users
 UserRouter.get('/', (req, res) => {
-  UserController.findAll(req, res)
+  UserController.findAll(res)
 })
 
 //User login
