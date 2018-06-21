@@ -10,8 +10,14 @@ UserRouter.get('/', (req, res) => {
 })
 
 //User login
-UserRouter.post('/login', (req, res, next) => {
-  UserController.login(req, res)
+UserRouter.post('/login', (req, res) => {
+  if (req.body.email && req.body.password) {
+    UserController.login(req, res)
+  } else {
+    res.status(400).json({
+      error: 'missing arguments'
+    })
+  }
 })
 
 //Create Admin User
