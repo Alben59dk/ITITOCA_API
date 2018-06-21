@@ -5,7 +5,7 @@ const UserModel = require('../models/user')
 
 class UserController {
 
-    static getUsers(req, res) {
+    static findAll(req, res) {
         UserModel.find({},(err, data) => {
             if(err) {
                 res.status(503).json({
@@ -19,7 +19,7 @@ class UserController {
           })
     }
 
-    static userLogin(req, res) {
+    static login(req, res) {
         console.log(req.body)
         UserModel.find({email: req.body.email})
         .exec()
@@ -67,7 +67,7 @@ class UserController {
         })
     }
 
-    static createAdmin(req, res) {
+    static addAdmin(req, res) {
         let salt = bcrypt.genSaltSync(11)
         let hash = bcrypt.hashSync(req.body.password, salt)
         let userInfo = {
@@ -85,7 +85,7 @@ class UserController {
         })
     }
 
-    static disableUser(id, res) {
+    static disableOne(id, res) {
         UserModel.findByIdAndUpdate(id, {
             active: false
         }, { new:  true }, (err, doc) => {
@@ -103,7 +103,7 @@ class UserController {
         })
     }
 
-    static activateUser(id, res) {
+    static activateOne(id, res) {
         console.log(id)
         UserModel.findByIdAndUpdate(id, {
             active: true
@@ -122,7 +122,7 @@ class UserController {
         })
     }
 
-    static deleteUser(pseudo, res) {
+    static deleteOne(pseudo, res) {
         UserModel.findOneAndDelete({pseudo: pseudo}, (err, doc) => {
             if (err) {
                 handleError(err)
