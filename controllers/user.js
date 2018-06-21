@@ -5,18 +5,21 @@ const UserModel = require('../models/user')
 
 class UserController {
 
-    static findAll(req, res) {
-        UserModel.find({},(err, data) => {
-            if(err) {
-                res.status(503).json({
-                    error: err.message
-                })    
-                return
-            }
-            if(data) {
-                 res.status(200).json(data)
-            } 
+    static findAll(res) {
+      UserModel.find({})
+      .exec(function (err, data) {
+        if(err) {
+          res.status(503).json({
+            error: err.message
           })
+          return
+        }
+        if(data) {
+          res.status(200).json(data)
+        } else {
+          res.status(200).json([])
+        }
+      })
     }
 
     static login(req, res) {
