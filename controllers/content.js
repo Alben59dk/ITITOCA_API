@@ -4,12 +4,7 @@ const ObjectId = require('mongoose').Types.ObjectId;
 class ContentController {
 
   static findAll(req, res) {
-    let contentPerPage = 10
-    let page = req.query.page || 1
-
     ArticleModel.find({})
-    .skip((contentPerPage * page) - contentPerPage)
-    .limit(contentPerPage)
     .populate('author_id', '-password')
     .populate('categories')
     .sort('-last_update_date')
