@@ -122,13 +122,19 @@ class UserController {
         })
     }
 
-    static deleteOne(pseudo, res) {
-        UserModel.findOneAndDelete({pseudo: pseudo}, (err, doc) => {
-            if (err) {
-                handleError(err)
-            } else {
-                return res.status(200).json(doc)
-            }
+    static deleteOne(id, res) {
+        UserModel.findByIdAndDelete(id, (err, doc) => {
+          if (err) {
+            res.status(503).json({
+              error: err.message
+            })
+            return
+          }
+          if (doc) {
+            res.status(201).json(doc)
+          } else {
+            res.status(204).json({})
+          }
         })
     }
 }
