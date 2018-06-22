@@ -105,7 +105,6 @@ class UserController {
     }
 
     static activateOne(id, res) {
-        console.log(id)
         UserModel.findByIdAndUpdate(id, {
             active: true
         }, { new:  true }, (err, doc) => {
