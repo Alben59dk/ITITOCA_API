@@ -32,7 +32,7 @@ UserRouter.post('/admin', (req, res) => {
 })
 
 //Deactivate User
-UserRouter.post('/disable/:id', (req, res) => {
+UserRouter.post('/disable/:id([a-f\\d]{24})', (req, res) => {
   UserController.disableOne(req.params.id, res)
 })
 
