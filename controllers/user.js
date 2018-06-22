@@ -47,10 +47,7 @@ class UserController {
                   userId: user[0]._id,
                   role: user[0].roles,
                 },
-                '1T1T0C4_S3CR3T',
-                {
-                  expiresIn: '1h'
-                }
+                '1T1T0C4_S3CR3T'
               )
             res.status(200).json({
                 token: token
