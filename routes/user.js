@@ -37,7 +37,7 @@ UserRouter.post('/disable/:id([a-f\\d]{24})', (req, res) => {
 })
 
 //Activate User
-UserRouter.post('/activate/:id', (req, res) => {
+UserRouter.post('/activate/:id([a-f\\d]{24})', (req, res) => {
   UserController.activateOne(req.params.id, res)
 })
 
