@@ -67,21 +67,23 @@ class UserController {
     }
 
     static addAdmin(req, res) {
-        let salt = bcrypt.genSaltSync(11)
-        let hash = bcrypt.hashSync(req.body.password, salt)
-        let userInfo = {
-          ...req.body,
-          password: hash
+      let salt = bcrypt.genSaltSync(11)
+      let hash = bcrypt.hashSync(req.body.password, salt)
+      let newUser = new UserModel({
+        email: req.body.email,
+        pseudo: req.body.pseudo,
+        password: hash,
+        roles: 'ADMIN'
+      })
+      newUser.save(function (err, user) {
+        if (err) {
+          res.status(503).json({
+            message: err.message
+          })
+        } else {
+            res.status(200).json(user)
         }
-        let newUser = UserModel(userInfo)
-        newUser.save(function (err, updatedTank) {
-            if (err) console.log('Error saving User...') 
-            else { 
-                res.status(200).json({
-                    message: 'User saved!'
-                })
-            }
-        })
+      })
     }
 
     static disableOne(id, res) {
