@@ -88,7 +88,7 @@ class UserController {
 
     static disableOne(id, res) {
         UserModel.findByIdAndUpdate(id, {
-            active: false
+          active: false
         }, { new:  true }, (err, doc) => {
             if(err) {
                 res.status(503).json({
