@@ -35,12 +35,16 @@ class UserController {
         }
         bcrypt.compare(req.body.password, user[0].password, (err, result) => {
           if (err) {
-            res.status(401).json({
-              message: "Auth Failed : wrong password"
+            res.status(503).json({
+              message: err
             })
             return
           }
-          if (result) {
+          if (!result) {
+            res.status(401).json({
+              message: "Auth Failed : wrong password"
+            })
+          } else {
             const token = jwt.sign(
                 {
                   email: user[0].email,
@@ -52,11 +56,7 @@ class UserController {
             res.status(200).json({
                 token: token
             })
-            return
           }
-          res.status(401).json({
-            message: "Auth Failed"
-          })
         })
       })
       .catch(err => {
