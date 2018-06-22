@@ -9,6 +9,17 @@ UserRouter.get('/', (req, res) => {
   UserController.findAll(res)
 })
 
+//Create new user
+UserRouter.post('/signup', (req, res) => {
+  if (req.body.email && req.body.pseudo && req.body.password) {
+    UserController.addOne(req, res)
+  } else {
+    res.status(400).json({
+      error: 'missing arguments'
+    })
+  }
+})
+
 //User login
 UserRouter.post('/login', (req, res) => {
   if (req.body.email && req.body.password) {

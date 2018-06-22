@@ -66,6 +66,26 @@ class UserController {
       })
     }
 
+  static addOne(req, res) {
+    let salt = bcrypt.genSaltSync(11)
+    let hash = bcrypt.hashSync(req.body.password, salt)
+    let newUser = new UserModel({
+      email: req.body.email,
+      pseudo: req.body.pseudo,
+      password: hash,
+      roles: 'JUNIOR_CONTRIBUTOR'
+    })
+    newUser.save(function (err, user) {
+      if (err) {
+        res.status(503).json({
+          message: err.message
+        })
+      } else {
+        res.status(200).json(user)
+      }
+    })
+  }
+
     static addAdmin(req, res) {
       let salt = bcrypt.genSaltSync(11)
       let hash = bcrypt.hashSync(req.body.password, salt)
