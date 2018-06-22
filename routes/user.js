@@ -22,7 +22,13 @@ UserRouter.post('/login', (req, res) => {
 
 //Create Admin User
 UserRouter.post('/admin', (req, res) => {
-  UserController.addAdmin(req, res)
+  if (req.body.email && req.body.pseudo && req.body.password) {
+    UserController.addAdmin(req, res)
+  } else {
+    res.status(400).json({
+      error: 'missing arguments'
+    })
+  }
 })
 
 //Deactivate User
