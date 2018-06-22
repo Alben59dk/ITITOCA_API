@@ -42,8 +42,8 @@ UserRouter.post('/activate/:id([a-f\\d]{24})', (req, res) => {
 })
 
 //Delete User
-UserRouter.delete('/delete/:pseudo', (req, res) => {
-  UserController.deleteOne(req.params.pseudo, res)
+UserRouter.delete('/delete/:id([a-f\\d]{24})', (req, res) => {
+  UserController.deleteOne(req.params.id, res)
 })
 
 module.exports = UserRouter
