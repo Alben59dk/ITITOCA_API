@@ -76,9 +76,10 @@ class UserController {
           password: hash
         }
         let newUser = UserModel(userInfo)
-        newUser.save(function (err, data) {
-            if (err) console.log('Error saving User...') 
-            else { 
+        newUser.save(function (err) {
+            if (err) {
+                res.status(401) 
+            } else { 
                 res.status(200).json({
                     message: 'User saved!'
                 })
