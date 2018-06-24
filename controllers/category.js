@@ -37,9 +37,16 @@ class CategoryController {
           }
           console.log(image.path + ' was deleted');
         });
-        res.status(503).json({
-          error: errS.message
-        })
+        if (errS.code === 11000) {
+          res.status(409).json({
+            code: 11000,
+            error: errS.message
+          })
+        } else {
+          res.status(503).json({
+            error: errS.message
+          })
+        }
       } else {
         res.status(201).json(obj)
       }

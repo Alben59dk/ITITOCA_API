@@ -27,9 +27,16 @@ class ArticleController {
           }
           console.log(image.path + ' was deleted');
         });
-        res.status(503).json({
-          error: errS.message
-        })
+        if (errS.code === 11000) {
+          res.status(409).json({
+            code: 11000,
+            error: errS.message
+          })
+        } else {
+          res.status(503).json({
+            error: errS.message
+          })
+        }
       } else {
         let opts = [
           { path: 'categories'},
@@ -59,9 +66,16 @@ class ArticleController {
     ArticleModel.findByIdAndUpdate(req.params.id, article,
       {new: true}, (err, doc) => {
         if (err) {
-          res.status(503).json({
-            error: err.message
-          })
+          if (err.code === 11000) {
+            res.status(409).json({
+              code: 11000,
+              error: err.message
+            })
+          } else {
+            res.status(503).json({
+              error: err.message
+            })
+          }
           return
         }
         if (doc) {

@@ -5,132 +5,168 @@ const UserModel = require('../models/user')
 
 class UserController {
 
-    static getUsers(req, res) {
-        UserModel.find({},(err, data) => {
-            if(err) {
-                res.status(503).json({
-                    error: err.message
-                })    
-                return
-            }
-            if(data) {
-                 res.status(200).json(data)
-            } 
-          })
-    }
-
-    static userLogin(req, res) {
-        console.log(req.body)
-        UserModel.find({email: req.body.email})
-        .exec()
-        .then(user => {
-            if (user.length < 1) {
-                return res.status(401).json({
-                    message: "Auth Failedd"
-                })
-            }
-            //DECRYPTION
-            bcrypt.compare(req.body.password, user[0].password, (err, result) => {
-            if(err) {
-                return res.status(401).json({
-                    message: "Auth Failed"
-                })
-            }
-            if(result) {
-                const token = jwt.sign(
-                    //Payload
-                    {
-                        email: user[0].email,
-                        userId: user[0]._id
-                    },
-                    'secret',
-                    {
-                        expiresIn: '1h'
-                    }
-                )
-                console.log('pass ok')
-                return res.status(200).json({
-                    message: 'Auth sucessful',
-                    token: token
-                })
-            }
-            res.status(401).json({
-                message: "Auth Failed"
-                })
-            })
-            
+  static findAll(res) {
+    UserModel.find({})
+    .exec(function (err, data) {
+      if(err) {
+        res.status(503).json({
+          error: err.message
         })
-        .catch(err => {
-            res.status(500).json({
+        return
+      }
+      if(data) {
+        res.status(200).json(data)
+      } else {
+        res.status(200).json([])
+      }
+    })
+  }
+
+  static login(req, res) {
+    UserModel.find({
+      email: req.body.email
+    })
+    .exec()
+    .then(user => {
+      if (user.length < 1) {
+        return res.status(401).json({
+          error: "Auth Failed : email not found"
+        })
+      }
+      bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+        if (err) {
+          res.status(503).json({
             error: err
-            })
-        })
-    }
-
-    static createAdmin(req, res) {
-        let salt = bcrypt.genSaltSync(11)
-        let hash = bcrypt.hashSync(req.body.password, salt)
-        let userInfo = {
-          ...req.body,
-          password: hash
+          })
+          return
         }
-        let newUser = UserModel(userInfo)
-        newUser.save(function (err, updatedTank) {
-            if (err) console.log('Error saving User...') 
-            else { 
-                res.status(200).json({
-                    message: 'User saved!'
-                })
-            }
+        if (!result) {
+          res.status(401).json({
+            error: "Auth Failed : wrong password"
+          })
+        } else {
+          const token = jwt.sign(
+              {
+                email: user[0].email,
+                userId: user[0]._id,
+                role: user[0].roles,
+              },
+              '1T1T0C4_S3CR3T'
+            )
+          res.status(200).json({
+              token: token
+          })
+        }
+      })
+    })
+    .catch(err => {
+        res.status(503).json({
+          error: err.message
         })
-    }
+    })
+  }
 
-    static disableUser(id, res) {
-        UserModel.findByIdAndUpdate(id, {
-            active: false
-        }, { new:  true }, (err, doc) => {
-            if(err) {
-                res.status(503).json({
-                    error: err.message
-                })
-                return 
-            }
-            if (doc) {
-                res.status(201).json(doc)
-            } else {
-                res.status(204).json({})
-            }
-        })
-    }
+  static addOne(req, res) {
+    let salt = bcrypt.genSaltSync(11)
+    let hash = bcrypt.hashSync(req.body.password, salt)
+    let newUser = new UserModel({
+      email: req.body.email,
+      pseudo: req.body.pseudo,
+      password: hash,
+      roles: 'JUNIOR_CONTRIBUTOR'
+    })
+    newUser.save(function (err, user) {
+      if (err) {
+        if (err.code === 11000) {
+          res.status(409).json({
+            code: 11000,
+            message: err.message
+          })
+        } else {
+          res.status(503).json({
+            message: err.message
+          })
+        }
+      } else {
+        res.status(200).json(user)
+      }
+    })
+  }
 
-    static activateUser(id, res) {
-        console.log(id)
-        UserModel.findByIdAndUpdate(id, {
-            active: true
-        }, { new:  true }, (err, doc) => {
-            if(err) {
-                res.status(503).json({
-                    error: err.message
-                })
-                return 
-            }
-            if (doc) {
-                res.status(201).json(doc)
-            } else {
-                res.status(204).json({})
-            }
-        })
-    }
+  static addAdmin(req, res) {
+    let salt = bcrypt.genSaltSync(11)
+    let hash = bcrypt.hashSync(req.body.password, salt)
+    let newUser = new UserModel({
+      email: req.body.email,
+      pseudo: req.body.pseudo,
+      password: hash,
+      roles: 'ADMIN'
+    })
+    newUser.save(function (err, user) {
+      if (err) {
+        if (err.code === 11000) {
+          res.status(409).json({
+            code: 11000,
+            message: err.message
+          })
+        } else {
+          res.status(503).json({
+            message: err.message
+          })
+        }
+      } else {
+          res.status(200).json(user)
+      }
+    })
+  }
 
-    static deleteUser(pseudo, res) {
-        UserModel.findOneAndDelete({pseudo: pseudo}, (err, doc) => {
-            if (err) {
-                handleError(err)
-            } else {
-                return res.status(200).json(doc)
-            }
+  static disableOne(id, res) {
+    UserModel.findByIdAndUpdate(id, {
+      active: false
+    }, { new:  true }, (err, doc) => {
+      if(err) {
+        res.status(503).json({
+          error: err.message
         })
-    }
+        return
+      }
+      if (doc) {
+        res.status(201).json(doc)
+      } else {
+        res.status(204).json({})
+      }
+    })
+  }
+
+  static activateOne(id, res) {
+    UserModel.findByIdAndUpdate(id, {
+      active: true
+    }, { new:  true }, (err, doc) => {
+      if(err) {
+        res.status(503).json({
+          error: err.message
+        })
+        return
+      }
+      if (doc) {
+        res.status(201).json(doc)
+      } else {
+        res.status(204).json({})
+      }
+    })
+  }
+
+  static deleteOne(id, res) {
+    UserModel.findByIdAndDelete(id, (err) => {
+      if (err) {
+        res.status(503).json({
+          error: err.message
+        })
+        return
+      }
+      res.status(204).json({})
+    })
+  }
 }
 
 module.exports = UserController
