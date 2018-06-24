@@ -20,7 +20,7 @@ ArticleRouter.post('/', imageUpload, (req, res) => {
   }
 })
 
-ArticleRouter.put('/:id', imageUpload, (req, res) => {
+ArticleRouter.put('/:id([a-f\\d]{24})', imageUpload, (req, res) => {
   ArticleController.modifyOne(req, res)
 })
 

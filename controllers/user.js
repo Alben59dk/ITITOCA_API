@@ -40,6 +40,7 @@ class UserController {
                 const token = jwt.sign(
                     //Payload
                     {
+                        pseudo: user[0].pseudo,
                         email: user[0].email,
                         userId: user[0]._id
                     },
@@ -75,7 +76,7 @@ class UserController {
           password: hash
         }
         let newUser = UserModel(userInfo)
-        newUser.save(function (err, updatedTank) {
+        newUser.save(function (err, data) {
             if (err) console.log('Error saving User...') 
             else { 
                 res.status(200).json({
