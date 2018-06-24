@@ -30,19 +30,19 @@ class UserController {
     .then(user => {
       if (user.length < 1) {
         return res.status(401).json({
-          message: "Auth Failed : email not found"
+          error: "Auth Failed : email not found"
         })
       }
       bcrypt.compare(req.body.password, user[0].password, (err, result) => {
         if (err) {
           res.status(503).json({
-            message: err
+            error: err
           })
           return
         }
         if (!result) {
           res.status(401).json({
-            message: "Auth Failed : wrong password"
+            error: "Auth Failed : wrong password"
           })
         } else {
           const token = jwt.sign(
@@ -77,9 +77,16 @@ class UserController {
     })
     newUser.save(function (err, user) {
       if (err) {
-        res.status(503).json({
-          message: err.message
-        })
+        if (err.code === 11000) {
+          res.status(409).json({
+            code: 11000,
+            message: err.message
+          })
+        } else {
+          res.status(503).json({
+            message: err.message
+          })
+        }
       } else {
         res.status(200).json(user)
       }
@@ -97,9 +104,16 @@ class UserController {
     })
     newUser.save(function (err, user) {
       if (err) {
-        res.status(503).json({
-          message: err.message
-        })
+        if (err.code === 11000) {
+          res.status(409).json({
+            code: 11000,
+            message: err.message
+          })
+        } else {
+          res.status(503).json({
+            message: err.message
+          })
+        }
       } else {
           res.status(200).json(user)
       }

@@ -28,7 +28,7 @@ class ContentController {
     })
   }
 
-  static findOne (id, res) {
+  static findOne(id, res) {
     ArticleModel.findById(id)
     .populate('categories')
     .populate('author_id', '-password')
