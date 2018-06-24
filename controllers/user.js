@@ -10,12 +10,14 @@ class UserController {
       .exec(function (err, data) {
         if(err) {
           res.status(503).json({
-            error: err.message
+            message: err
           })
           return
         }
-        if(data) {
-          res.status(200).json(data)
+        if (!result) {
+          res.status(401).json({
+            message: "Auth Failed : wrong password"
+          })
         } else {
           res.status(200).json([])
         }
