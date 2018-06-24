@@ -1,6 +1,8 @@
 const multer = require('multer')
 const crypto = require('crypto')
 
+const JWT_SECRET = '1T1T0C4_S3CR3T'
+
 function createUpload(dest) {
   let storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -23,4 +25,7 @@ function createUpload(dest) {
   })
 }
 
-module.exports = createUpload
+module.exports = {
+  createUpload,
+  JWT_SECRET
+}

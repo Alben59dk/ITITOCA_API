@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const JWT_SECRET = require('../config').JWT_SECRET
 
 const UserModel = require('../models/user')
 
@@ -51,7 +52,7 @@ class UserController {
                 userId: user[0]._id,
                 role: user[0].roles,
               },
-              '1T1T0C4_S3CR3T'
+              JWT_SECRET
             )
           res.status(200).json({
               token: token

@@ -1,6 +1,6 @@
 const express = require ('express')
 const CategoryController = require('../controllers/category')
-const createUpload = require('../config')
+const createUpload = require('../config').createUpload
 
 const CategoryRouter = express.Router()
 

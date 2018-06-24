@@ -1,7 +1,7 @@
 const express = require('express')
 const ChallengeController = require('../controllers/challenge')
 const ParticipationController = require('../controllers/participation')
-const createUpload = require('../config')
+const createUpload = require('../config').createUpload
 
 const ChallengeRouter = express.Router()
 

@@ -1,6 +1,6 @@
 const express = require ('express')
 const ArticleController = require('../controllers/article')
-const createUpload = require('../config')
+const createUpload = require('../config').createUpload
 
 const ArticleRouter = express.Router()
 
