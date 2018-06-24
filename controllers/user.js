@@ -78,7 +78,9 @@ class UserController {
         let newUser = UserModel(userInfo)
         newUser.save(function (err) {
             if (err) {
-                res.status(401) 
+                res.status(401).json({
+                    message: 'Something went wrong...'
+                })
             } else { 
                 res.status(200).json({
                     message: 'User saved!'
