@@ -100,7 +100,7 @@ class UserController {
     let newUser = new UserModel({
       email: req.body.email,
       pseudo: req.body.pseudo,
-      roles: req.body.roles,
+      roles: 'ADMINISTRATOR',
       password: hash    
     })
     newUser.save(function (err, user) {
