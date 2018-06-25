@@ -2,13 +2,14 @@ const express = require ('express')
 const ArticleController = require('../controllers/article')
 const createUpload = require('../config').createUpload
 const JWT_MIDDLEWARE = require('../config').JWT_MIDDLEWARE
+const JWT_PERMISSIONS = require('../config').JWT_PERMISSIONS
 
 const ArticleRouter = express.Router()
 
 const imageUpload = createUpload('public/images/articles').single('image')
 
 // Add a new article
-ArticleRouter.post('/', JWT_MIDDLEWARE, imageUpload, (req, res) => {
+ArticleRouter.post('/', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMIN'), imageUpload, (req, res) => {
   if (req.body.title
       && req.body.description
       && req.body.content
@@ -23,7 +24,7 @@ ArticleRouter.post('/', JWT_MIDDLEWARE, imageUpload, (req, res) => {
 })
 
 //Modify one article
-ArticleRouter.put('/:id([a-f\\d]{24})', JWT_MIDDLEWARE, imageUpload, (req, res) => {
+ArticleRouter.put('/:id([a-f\\d]{24})', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMIN'), imageUpload, (req, res) => {
   ArticleController.modifyOne(req, res)
 })
 

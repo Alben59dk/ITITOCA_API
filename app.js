@@ -31,12 +31,15 @@ app.use('/content', contentRouter)
 app.use('/category', categoryRouter)
 
 app.use(function (err, req, res, next) {
-  if (err.name === 'UnauthorizedError') {
+  if (err.code === 'permission_denied') {
+    res.status(403).json({
+      error: 'Permission denied'
+    });
+  } else if (err.name === 'UnauthorizedError') {
     res.status(401).json({
       error: 'Unauthorized access'
     });
   }
-  next()
 });
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
