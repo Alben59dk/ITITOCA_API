@@ -1,6 +1,7 @@
 const express = require ('express')
 const CategoryController = require('../controllers/category')
 const createUpload = require('../config').createUpload
+const JWT_MIDDLEWARE = require('../config').JWT_MIDDLEWARE
 
 const CategoryRouter = express.Router()
 
@@ -10,7 +11,7 @@ CategoryRouter.get('/', (req, res) => {
   CategoryController.findAll(res)
 })
 
-CategoryRouter.post('/', imageUpload, (req, res) => {
+CategoryRouter.post('/', JWT_MIDDLEWARE, imageUpload, (req, res) => {
   if (req.body.name && req.body.type && req.file) {
     CategoryController.addNew(req.body, req.file, res)
   } else {

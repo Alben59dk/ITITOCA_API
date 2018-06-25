@@ -3,13 +3,14 @@ const ContentController = require('../controllers/content')
 const challengeRouter = require('./challenge')
 const articleRouter = require('./article')
 
+const JWT_MIDDLEWARE = require('../config').JWT_MIDDLEWARE
 const ContentRouter = express.Router()
 
 ContentRouter.use('/challenge', challengeRouter)
 ContentRouter.use('/article', articleRouter)
 
 // Get all contents
-ContentRouter.get('/', (req, res) => {
+ContentRouter.get('/', JWT_MIDDLEWARE, (req, res) => {
   ContentController.findAll(req, res)
 })
 
@@ -19,12 +20,12 @@ ContentRouter.get('/:id([a-f\\d]{24})', (req, res) => {
 })
 
 // Publish one content by ID
-ContentRouter.post('/publish/:id([a-f\\d]{24})', (req, res) => {
+ContentRouter.post('/publish/:id([a-f\\d]{24})', JWT_MIDDLEWARE, (req, res) => {
   ContentController.publishOne(req.params.id, res)
 })
 
 // Archive one content by ID
-ContentRouter.post('/archive/:id([a-f\\d]{24})', (req, res) => {
+ContentRouter.post('/archive/:id([a-f\\d]{24})', JWT_MIDDLEWARE, (req, res) => {
   ContentController.archiveOne(req.params.id, res)
 })
 
