@@ -10,13 +10,14 @@ const contentRouter = require('./routes/content')
 const categoryRouter = require('./routes/category')
 
 const app = express();
-app.use(cors())
 
 mongoose.connect('mongodb://localhost:27017/ititoca')
 
 if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('dev'))
 }
+
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -29,6 +30,17 @@ app.use('/user', userRouter);
 app.use('/content', contentRouter)
 app.use('/category', categoryRouter)
 
+app.use(function (err, req, res, next) {
+  if (err.code === 'permission_denied') {
+    res.status(403).json({
+      error: 'Permission denied'
+    });
+  } else if (err.name === 'UnauthorizedError') {
+    res.status(401).json({
+      error: 'Unauthorized access'
+    });
+  }
+});
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

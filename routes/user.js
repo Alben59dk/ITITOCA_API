@@ -1,11 +1,11 @@
 const express = require('express')
-
-const UserRouter = express.Router()
-
 const UserController = require('../controllers/user')
+const UserRouter = express.Router()
+const JWT_MIDDLEWARE = require('../config').JWT_MIDDLEWARE
+const JWT_PERMISSIONS = require('../config').JWT_PERMISSIONS
 
 //Get all users
-UserRouter.get('/', (req, res) => {
+UserRouter.get('/', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMIN'), (req, res) => {
   UserController.findAll(res)
 })
 
@@ -32,7 +32,7 @@ UserRouter.post('/login', (req, res) => {
 })
 
 //Create Admin User
-UserRouter.post('/admin', (req, res) => {
+UserRouter.post('/admin', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMIN'), (req, res) => {
   if (req.body.email && req.body.pseudo && req.body.password) {
     UserController.addAdmin(req, res)
   } else {
@@ -43,17 +43,17 @@ UserRouter.post('/admin', (req, res) => {
 })
 
 //Deactivate User
-UserRouter.post('/disable/:id([a-f\\d]{24})', (req, res) => {
+UserRouter.post('/disable/:id([a-f\\d]{24})', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMIN'), (req, res) => {
   UserController.disableOne(req.params.id, res)
 })
 
 //Activate User
-UserRouter.post('/activate/:id([a-f\\d]{24})', (req, res) => {
+UserRouter.post('/activate/:id([a-f\\d]{24})', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMIN'), (req, res) => {
   UserController.activateOne(req.params.id, res)
 })
 
 //Delete User
-UserRouter.delete('/delete/:id([a-f\\d]{24})', (req, res) => {
+UserRouter.delete('/delete/:id([a-f\\d]{24})', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMIN'), (req, res) => {
   UserController.deleteOne(req.params.id, res)
 })
 

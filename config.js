@@ -1,7 +1,13 @@
 const multer = require('multer')
 const crypto = require('crypto')
+const jwt = require('express-jwt');
+const JWT_PERMISSIONS = require('express-jwt-permissions')({
+  permissionsProperty: 'role'
+})
 
 const JWT_SECRET = '1T1T0C4_S3CR3T'
+
+const JWT_MIDDLEWARE = jwt({secret: JWT_SECRET})
 
 function createUpload(dest) {
   let storage = multer.diskStorage({
@@ -27,5 +33,7 @@ function createUpload(dest) {
 
 module.exports = {
   createUpload,
-  JWT_SECRET
+  JWT_SECRET,
+  JWT_MIDDLEWARE,
+  JWT_PERMISSIONS
 }
