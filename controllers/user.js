@@ -95,7 +95,6 @@ class UserController {
   }
 
   static addAdmin(req, res) {
-    console.log(req.body)
     let salt = bcrypt.genSaltSync(11)
     let hash = bcrypt.hashSync(req.body.password, salt)
     let newUser = new UserModel({
