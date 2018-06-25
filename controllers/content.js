@@ -23,8 +23,29 @@ class ContentController {
     })
   }
 
-  static findOne(id, res) {
+  static findOneById(id, res) {
     ArticleModel.findById(id)
+    .populate('categories')
+    .populate('author_id', '-password')
+    .exec(function (err, article) {
+      if (err) {
+        res.status(503).json({
+          error: err.message
+        })
+        return
+      }
+      if (article) {
+        res.status(200).json(article)
+      } else {
+        res.status(200).json([])
+      }
+    })
+  }
+
+  static findOneBySlug(slug, res) {
+    ArticleModel.find({
+      technical_name: slug
+    })
     .populate('categories')
     .populate('author_id', '-password')
     .exec(function (err, article) {
