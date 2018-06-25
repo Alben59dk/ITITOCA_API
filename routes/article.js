@@ -15,7 +15,7 @@ ArticleRouter.post('/', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMIN'), imageUpl
       && req.body.content
       && req.body.categories
       && req.file) {
-    ArticleController.addNew(req.body, req.file, res)
+    ArticleController.addNew(req, res)
   } else {
     res.status(400).json({
       error: 'missing arguments'

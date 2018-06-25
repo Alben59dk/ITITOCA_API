@@ -21,7 +21,7 @@ ChallengeRouter.post('/', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMIN'), imageU
       && req.body.categories
       && req.body.endDate
       && req.file) {
-    ChallengeController.addNew(req.body, req.file, res)
+    ChallengeController.addNew(req, res)
   } else {
     res.status(400).json({
       error: 'missing arguments'
@@ -32,8 +32,8 @@ ChallengeRouter.post('/', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMIN'), imageU
 // Add a new participation to one challenge
 ChallengeRouter.post('/:id([a-f\\d]{24})', JWT_MIDDLEWARE, JWT_PERMISSIONS.check([['ADMIN'],['JUNIOR_CONTRIBUTOR'],['CONFIRMED_CONTRIBUTOR']]), (req, res) => {
   if (req.body.type === 'PARTICIPATION') {
-    if (req.body.message && req.body.author && req.body.content_id) {
-      ParticipationController.addNew(req.body, res)
+    if (req.body.message) {
+      ParticipationController.addNew(req, res)
     }
   } else {
     res.status(400).json({

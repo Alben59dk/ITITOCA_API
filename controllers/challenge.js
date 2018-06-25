@@ -4,7 +4,9 @@ const fs = require('fs')
 
 class ChallengeController {
 
-  static addNew(params, image, res) {
+  static addNew(req, res) {
+    let params = req.body
+    let image = req.file
     let challenge = new ChallengeModel({
       title: params.title,
       technical_name: slug(params.title),
@@ -12,7 +14,7 @@ class ChallengeController {
       description: params.description,
       content: params.content,
       type: 'CHALLENGE',
-      author_id: params.author,
+      author_id: req.user.userId,
       status: 'WAITING_FOR_VALIDATION',
       categories: params.categories,
       end_of_participation_date: params.endDate,

@@ -4,7 +4,9 @@ const fs = require('fs')
 
 class ArticleController {
 
-  static addNew (params, image, res) {
+  static addNew (req, res) {
+    let params = req.body
+    let image = req.file
     let article = new ArticleModel({
       title: params.title,
       technical_name: slug(params.title),
@@ -12,7 +14,7 @@ class ArticleController {
       description: params.description,
       content: params.content,
       type: 'ARTICLE',
-      author_id: params.author,
+      author_id: req.user.userId,
       status: 'WAITING_FOR_VALIDATION',
       categories: params.categories
     })
