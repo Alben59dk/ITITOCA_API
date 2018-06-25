@@ -9,12 +9,12 @@ const ChallengeRouter = express.Router()
 const imageUpload = createUpload('public/images/challenges').single('image')
 
 // Modify one challenge
-ChallengeRouter.put('/:id([a-f\\d]{24})', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMIN'), imageUpload, (req, res) => {
+ChallengeRouter.put('/:id([a-f\\d]{24})', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMINISTRATOR'), imageUpload, (req, res) => {
     ChallengeController.modifyOne(req, res)
 })
 
 // Add a new challenge
-ChallengeRouter.post('/', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMIN'), imageUpload, (req, res) => {
+ChallengeRouter.post('/', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMINISTRATOR'), imageUpload, (req, res) => {
   if (req.body.title
       && req.body.description
       && req.body.content
@@ -30,7 +30,7 @@ ChallengeRouter.post('/', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMIN'), imageU
 })
 
 // Add a new participation to one challenge
-ChallengeRouter.post('/:id([a-f\\d]{24})', JWT_MIDDLEWARE, JWT_PERMISSIONS.check([['ADMIN'],['JUNIOR_CONTRIBUTOR'],['CONFIRMED_CONTRIBUTOR']]), (req, res) => {
+ChallengeRouter.post('/:id([a-f\\d]{24})', JWT_MIDDLEWARE, JWT_PERMISSIONS.check([['ADMINISTRATOR'],['JUNIOR_CONTRIBUTOR'],['CONFIRMED_CONTRIBUTOR']]), (req, res) => {
   if (req.body.type === 'PARTICIPATION') {
     if (req.body.message) {
       ParticipationController.addNew(req, res)
