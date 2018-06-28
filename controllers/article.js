@@ -16,11 +16,12 @@ class ArticleController {
       type: 'ARTICLE',
       author_id: req.user.userId,
       status: 'WAITING_FOR_VALIDATION',
-      categories: params.categories
+      categories: params.categories.split(',')
     })
 
     article.save((errS, obj) => {
       if (errS) {
+        console.log(errS)
         fs.unlink(image.path, (errU) => {
           if (errU) {
             res.status(503).json({
