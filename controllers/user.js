@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const JWT_SECRET = require('../config').JWT_SECRET
+const crypto = require('crypto')
 
 const UserModel = require('../models/user')
 
@@ -216,6 +217,40 @@ class UserController {
         return
       }
       res.status(204).json({})
+    })
+  }
+
+  static resetPassword(mail, res) {
+    UserModel.find({
+      email: mail
+    })
+    .exec()
+    .then(users => {
+      if (users === null || users === undefined || users.length < 1) {
+        return res.status(401).json({
+          error: "Auth Failed : email not found"
+        })
+      }
+      let user = users[0]
+      let newPassword = crypto.randomBytes(20).toString('hex').substring(15, 25)
+      console.log(newPassword)
+      let salt = bcrypt.genSaltSync(11)
+      let hash = bcrypt.hashSync(newPassword, salt)
+      UserModel.findOneAndUpdate({ email: mail }, { password: hash }, (err, obj) => {
+        if (err) {
+          res.status(503).json({
+            error: err.message
+          })
+        } else if (obj) {
+          //Send email
+          console.log('Email sent to ' + obj.email)
+          res.status(204).json({})
+        } else {
+          res.status(400).json({
+            error: 'error unknown'
+          })
+        }
+      })
     })
   }
 }

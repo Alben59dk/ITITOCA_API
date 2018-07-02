@@ -53,6 +53,17 @@ UserRouter.post('/admin', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMINISTRATOR')
   }
 })
 
+//Reset Password
+UserRouter.post('/reset', (req, res) => {
+  if (req.body.email) {
+    UserController.resetPassword(req.body.email, res)
+  } else {
+    res.status(400).json({
+      error: 'missing arguments'
+    })
+  }
+})
+
 //Deactivate User
 UserRouter.post('/disable/:id([a-f\\d]{24})', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMINISTRATOR'), (req, res) => {
   UserController.disableOne(req.params.id, res)
