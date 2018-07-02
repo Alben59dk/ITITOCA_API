@@ -31,6 +31,17 @@ UserRouter.post('/login', (req, res) => {
   }
 })
 
+//Admin login
+UserRouter.post('/login/admin', (req, res) => {
+  if (req.body.email && req.body.password) {
+    UserController.loginAsAdmin(req, res)
+  } else {
+    res.status(400).json({
+      error: 'missing arguments'
+    })
+  }
+})
+
 //Create Admin User
 UserRouter.post('/admin', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMINISTRATOR'), (req, res) => {
   if (req.body.email && req.body.pseudo && req.body.password) {

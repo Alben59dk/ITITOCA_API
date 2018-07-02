@@ -67,6 +67,56 @@ class UserController {
     })
   }
 
+  static loginAsAdmin(req, res) {
+    UserModel.find({
+      email: req.body.email
+    })
+    .exec()
+    .then(user => {
+      if (user === null || user === undefined || user.length < 1) {
+        return res.status(401).json({
+          error: "Auth Failed : email not found"
+        })
+      }
+      bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+        if (err) {
+          res.status(503).json({
+            error: err
+          })
+          return
+        }
+        if (!result) {
+          res.status(401).json({
+            error: "Auth Failed : wrong password"
+          })
+        } else {
+          if (user[0].roles === 'ADMINISTRATOR') {
+            const token = jwt.sign(
+                {
+                  email: user[0].email,
+                  userId: user[0]._id,
+                  role: user[0].roles,
+                },
+                JWT_SECRET
+              )
+            res.status(200).json({
+                token: token
+            })
+          } else {
+            res.status(403).json({
+              error: "Auth Failed : permission denied."
+            })
+          }
+        }
+      })
+    })
+    .catch(err => {
+        res.status(503).json({
+          error: err.message
+        })
+    })
+  }
+
   static addOne(req, res) {
     let salt = bcrypt.genSaltSync(11)
     let hash = bcrypt.hashSync(req.body.password, salt)
