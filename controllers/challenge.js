@@ -16,7 +16,7 @@ class ChallengeController {
       type: 'CHALLENGE',
       author_id: req.user.userId,
       status: 'WAITING_FOR_VALIDATION',
-      categories: params.categories,
+      categories: params.categories.split(','),
       end_of_participation_date: params.endDate,
       synthesis: (params.synthesis ? params.synthesis : '')
     })
