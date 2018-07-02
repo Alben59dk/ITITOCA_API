@@ -30,7 +30,7 @@ class UserController {
     })
     .exec()
     .then(user => {
-      if (user.length < 1) {
+      if (user === null || user === undefined || user.length < 1) {
         return res.status(401).json({
           error: "Auth Failed : email not found"
         })
@@ -152,7 +152,7 @@ class UserController {
       email: req.body.email,
       pseudo: req.body.pseudo,
       roles: 'ADMINISTRATOR',
-      password: hash    
+      password: hash
     })
     newUser.save(function (err, user) {
       if (err) {
