@@ -9,20 +9,38 @@ class UserController {
 
   static findAll(res) {
     UserModel.find({})
-    .exec(function (err, data) {
-      if(err) {
-        res.status(503).json({
-          error: err.message
-        })
-        return
-      }
-      if(data) {
-        res.status(200).json(data)
-      } else {
-        res.status(200).json([])
-      }
-    })
+      .exec(function (err, data) {
+        if(err) {
+          res.status(503).json({
+            error: err.message
+          })
+          return
+        }
+        if(data) {
+          res.status(200).json(data)
+        } else {
+          res.status(200).json([])
+        }
+      })
   }
+
+  static findOne (id, res) {
+    UserModel.findById(id)
+      .exec(function (err, data) {
+        if(err) {
+          res.status(503).json({
+            error: err.message
+          })
+          return
+        }
+        if(data) {
+          res.status(200).json(data)
+        } else {
+          res.status(200).json([])
+        }
+      })
+  }
+
 
   static login(req, res) {
     UserModel.find({

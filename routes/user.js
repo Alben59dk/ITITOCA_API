@@ -9,6 +9,12 @@ UserRouter.get('/', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMINISTRATOR'), (req
   UserController.findAll(res)
 })
 
+//Get user by id
+
+UserRouter.get('/:id', (req, res) => {
+  UserController.findOne(req.params.id, res)
+})
+
 //Create new user
 UserRouter.post('/signup', (req, res) => {
   if (req.body.email && req.body.pseudo && req.body.password) {
