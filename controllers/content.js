@@ -160,7 +160,11 @@ class ContentController {
         return
       }
       if (result) {
-        res.status(200).json(result)
+        result.page = page
+        ArticleModel.count({}, function(err, count){
+          result.totalPages = count / 10 + 1
+          res.status(200).json(result)
+        });
       } else {
         res.status(200).json([])
       }
