@@ -160,7 +160,10 @@ class ContentController {
         return
       }
       if (result) {
-        ArticleModel.count({}, function(err, count) {
+        ArticleModel.count({
+          categories: { $all: filters },
+          status: 'PUBLISHED'
+        }, function(err, count) {
           let obj = {
             page: page,
             totalPages: Math.floor(count / 10 + 1),
