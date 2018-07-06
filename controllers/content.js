@@ -160,14 +160,12 @@ class ContentController {
         return
       }
       if (result) {
-        result.page = page
         ArticleModel.count({}, function(err, count) {
           let obj = {
             page: page,
-            totalPages: count / 10 + 1,
+            totalPages: Math.floor(count / 10 + 1),
             data: result
           }
-          result.totalPages = Math.floor(count / 10 + 1)
           res.status(200).json(obj)
         });
       } else {
