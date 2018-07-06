@@ -167,7 +167,7 @@ class ContentController {
             totalPages: count / 10 + 1,
             data: result
           }
-          result.totalPages = count / 10 + 1
+          result.totalPages = Math.floor(count / 10 + 1)
           res.status(200).json(obj)
         });
       } else {
