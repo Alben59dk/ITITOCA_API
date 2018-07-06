@@ -10,8 +10,7 @@ UserRouter.get('/', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMINISTRATOR'), (req
 })
 
 //Get user by id
-
-UserRouter.get('/:id', (req, res) => {
+UserRouter.get('/:id', JWT_MIDDLEWARE, JWT_PERMISSIONS.check([['ADMINISTRATOR'],['JUNIOR_CONTRIBUTOR'],['CONFIRMED_CONTRIBUTOR']]), (req, res) => {
   UserController.findOne(req.params.id, res)
 })
 
