@@ -14,7 +14,11 @@ let challengeSchema = new mongoose.Schema({
   },
   synthesis: {
     type: String
-  }
+  },
+  embedded: {
+    type: String,
+    required: false
+  },
 })
 
 let ChallengeModel = ArticleModel.discriminator('ChallengeModel', challengeSchema)
