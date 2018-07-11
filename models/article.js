@@ -14,6 +14,9 @@ let articleSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  video: {
+    type: String
+  },
   description: {
     type: String,
     required: true

@@ -11,6 +11,7 @@ class ChallengeController {
       title: params.title,
       technical_name: slug(params.title),
       image: image.path,
+      video: params.video,
       description: params.description,
       content: params.content,
       type: 'CHALLENGE',
