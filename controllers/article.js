@@ -59,7 +59,7 @@ class ArticleController {
   }
 
   static modifyOne(req, res) {
-    let article = req.body
+    let article = {...req.body, categories: req.body.categories.split(',')}
     if (req.file !== undefined && req.file.path !== undefined && req.file.path.length > 0) {
       article.image = req.file.path
     }
