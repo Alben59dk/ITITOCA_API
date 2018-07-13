@@ -5,6 +5,10 @@ const crypto = require('crypto')
 
 const UserModel = require('../models/user')
 
+
+const mailjet = require('node-mailjet')
+  .connect('abdd9a68b3717531394e1e17a8d94622', '077b22d48be25b44d773eb3129e95b10')
+
 class UserController {
 
   static findAll(res) {
@@ -50,7 +54,7 @@ class UserController {
     .then(user => {
       if (user === null || user === undefined || user.length < 1) {
         return res.status(401).json({
-          error: "Auth Failed : email not found"
+          error: 'Auth Failed : email not found'
         })
       }
       bcrypt.compare(req.body.password, user[0].password, (err, result) => {
@@ -62,7 +66,7 @@ class UserController {
         }
         if (!result) {
           res.status(401).json({
-            error: "Auth Failed : wrong password"
+            error: 'Auth Failed : wrong password'
           })
         } else {
           const token = jwt.sign(
@@ -94,7 +98,7 @@ class UserController {
     .then(user => {
       if (user === null || user === undefined || user.length < 1) {
         return res.status(401).json({
-          error: "Auth Failed : email not found"
+          error: 'Auth Failed : email not found'
         })
       }
       bcrypt.compare(req.body.password, user[0].password, (err, result) => {
@@ -106,7 +110,7 @@ class UserController {
         }
         if (!result) {
           res.status(401).json({
-            error: "Auth Failed : wrong password"
+            error: 'Auth Failed : wrong password'
           })
         } else {
           if (user[0].roles === 'ADMINISTRATOR') {
@@ -123,7 +127,7 @@ class UserController {
             })
           } else {
             res.status(403).json({
-              error: "Auth Failed : permission denied."
+              error: 'Auth Failed : permission denied.'
             })
           }
         }
@@ -238,38 +242,70 @@ class UserController {
     })
   }
 
-  static resetPassword(mail, res) {
+  static resetPassword(mail, pseudo, res) {
     UserModel.find({
       email: mail
     })
-    .exec()
-    .then(users => {
-      if (users === null || users === undefined || users.length < 1) {
-        return res.status(401).json({
-          error: "Auth Failed : email not found"
-        })
-      }
-      let user = users[0]
-      let newPassword = crypto.randomBytes(20).toString('hex').substring(15, 25)
-      console.log(newPassword)
-      let salt = bcrypt.genSaltSync(11)
-      let hash = bcrypt.hashSync(newPassword, salt)
-      UserModel.findOneAndUpdate({ email: mail }, { password: hash }, (err, obj) => {
-        if (err) {
-          res.status(503).json({
-            error: err.message
-          })
-        } else if (obj) {
-          //Send email
-          console.log('Email sent to ' + obj.email)
-          res.status(204).json({})
-        } else {
-          res.status(400).json({
-            error: 'error unknown'
+      .exec()
+      .then(users => {
+        if (users === null || users === undefined || users.length < 1) {
+          return res.status(401).json({
+            error: 'Auth Failed : email not found'
           })
         }
+        let user = users[0]
+        let newPassword = crypto.randomBytes(20).toString('hex').substring(15, 25)
+        console.log(newPassword)
+        let salt = bcrypt.genSaltSync(11)
+        let hash = bcrypt.hashSync(newPassword, salt)
+        UserModel.findOneAndUpdate({ email: mail }, { password: hash }, (err, obj) => {
+          if (err) {
+            res.status(503).json({
+              error: err.message
+            })
+          } else if (obj) {
+            //Send email
+            const request = mailjet
+              .post('send', {'version': 'v3.1'})
+              .request({
+                'Messages': [
+                  {
+                    'From': {
+                      'Email': 'martin@lapilulerouge.io', // to be modified
+                      'Name': 'Ititoca' // to be modified
+                    },
+                    'To': [
+                      {
+                        'Email': obj.email,
+                        'Name': obj.pseudo
+                      }
+                    ],
+                    'TemplateID': 481379,
+                    'TemplateLanguage': true,
+                    'Subject': 'Votre demande de mot de passe Ititoca',
+                    'Variables': {
+                      'firstName': obj.pseudo,
+                      'password': newPassword
+                    }
+                  }
+                ]
+              })
+            request
+              .then((result) => {
+                console.log(result.body)
+              })
+              .catch((err) => {
+                console.log(err.statusCode)
+              })
+            console.log('Email sent to ' + obj.email)
+            res.status(204).json({})
+          } else {
+            res.status(400).json({
+              error: 'error unknown'
+            })
+          }
+        })
       })
-    })
   }
 }
 
