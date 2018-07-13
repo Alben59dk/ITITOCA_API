@@ -65,17 +65,23 @@ class UserController {
             error: "Auth Failed : wrong password"
           })
         } else {
-          const token = jwt.sign(
-              {
-                email: user[0].email,
-                userId: user[0]._id,
-                role: user[0].roles,
-              },
-              JWT_SECRET
-            )
-          res.status(200).json({
-              token: token
-          })
+          if (user[0].active) {
+            const token = jwt.sign(
+                {
+                  email: user[0].email,
+                  userId: user[0]._id,
+                  role: user[0].roles,
+                },
+                JWT_SECRET
+              )
+            res.status(200).json({
+                token: token
+            })
+          } else {
+            res.status(403).json({
+              error: "Auth Failed : account disabled"
+            })
+          }
         }
       })
     })
