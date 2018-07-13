@@ -84,4 +84,14 @@ UserRouter.delete('/delete/:id([a-f\\d]{24})', JWT_MIDDLEWARE, JWT_PERMISSIONS.c
   UserController.deleteOne(req.params.id, res)
 })
 
+UserRouter.post('/newsletter', (req, res) => {
+  if (req.body.email) {
+    UserController.sendNews(req.body.email, res)
+  } else {
+    res.status(400).json({
+      error: 'missing arguments'
+    })
+  }
+})
+
 module.exports = UserRouter
