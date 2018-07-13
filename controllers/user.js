@@ -307,6 +307,38 @@ class UserController {
         })
       })
   }
+
+  static sendNews (mail, res) {
+    const request = mailjet
+      .post('send', {'version': 'v3.1'})
+      .request({
+        'Messages': [
+          {
+            'From': {
+              'Email': 'martin@lapilulerouge.io', // to be modified
+              'Name': 'Ititoca' // to be modified
+            },
+            'To': [
+              {
+                'Email': mail
+              }
+            ],
+            'TemplateID': 481395,
+            'TemplateLanguage': true,
+            'Subject': 'Ititoca : confirmation de votre inscription'
+          }
+        ]
+      })
+    request
+      .then((result) => {
+        console.log(result.body)
+        res.status(201).json({})
+      })
+      .catch((err) => {
+        console.log(err.statusCode)
+        res.status(503).json({})
+      })
+  }
 }
 
 module.exports = UserController
