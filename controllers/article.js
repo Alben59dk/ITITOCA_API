@@ -21,7 +21,6 @@ class ArticleController {
 
     article.save((errS, obj) => {
       if (errS) {
-        console.log(errS)
         fs.unlink(image.path, (errU) => {
           if (errU) {
             res.status(503).json({
@@ -61,6 +60,14 @@ class ArticleController {
   static modifyOne(req, res) {
     let article = {...req.body, categories: req.body.categories.split(',')}
     if (req.file !== undefined && req.file.path !== undefined && req.file.path.length > 0) {
+      fs.unlink(article.image, (errU) => {
+        if (errU) {
+          res.status(503).json({
+            error: errU.message
+          })
+        }
+        console.log(article.image + ' was deleted');
+      });
       article.image = req.file.path
     }
     article.technical_name = slug(article.title)
@@ -69,6 +76,14 @@ class ArticleController {
     ArticleModel.findByIdAndUpdate(req.params.id, article,
       {new: true}, (err, doc) => {
         if (err) {
+          fs.unlink(req.file.path, (errU) => {
+            if (errU) {
+              res.status(503).json({
+                error: errU.message
+              })
+            }
+            console.log(req.file.path + ' was deleted');
+          });
           if (err.code === 11000) {
             res.status(409).json({
               code: 11000,
