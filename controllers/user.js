@@ -242,7 +242,7 @@ class UserController {
     })
   }
 
-  static resetPassword(mail, pseudo, res) {
+  static resetPassword (mail, res) {
     UserModel.find({
       email: mail
     })
@@ -297,7 +297,7 @@ class UserController {
               .catch((err) => {
                 console.log(err.statusCode)
               })
-            console.log('Email sent to ' + obj.email)
+            console.log('Email sent to ' + mail)
             res.status(204).json({})
           } else {
             res.status(400).json({
