@@ -169,11 +169,42 @@ class UserController {
         }
       } else {
         res.status(200).json(user)
+        const request = mailjet
+          .post('send', {'version': 'v3.1'})
+          .request({
+            'Messages': [
+              {
+                'From': {
+                  'Email': 'martin@lapilulerouge.io', // to be modified
+                  'Name': 'Ititoca' // to be modified
+                },
+                'To': [
+                  {
+                    'Email': req.body.email,
+                    'Name': req.body.pseudo
+                  }
+                ],
+                'TemplateID': 479346,
+                'TemplateLanguage': true,
+                'Subject': 'Bienvenue chez nous',
+                'Variables': {
+                  'firstName': req.body.pseudo
+                }
+              }
+            ]
+          })
+        request
+          .then((result) => {
+            console.log(result.body)
+          })
+          .catch((err) => {
+            console.log(err.statusCode)
+          })
       }
     })
   }
 
-  static addAdmin(req, res) {
+  static addAdmin (req, res) {
     let salt = bcrypt.genSaltSync(11)
     let hash = bcrypt.hashSync(req.body.password, salt)
     let newUser = new UserModel({
