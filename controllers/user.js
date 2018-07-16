@@ -291,19 +291,23 @@ class UserController {
     newsletterContactRequestCreator.then(result => {
       const sendNewsletterSubscriptionRequest = mailjet.sendRequestCreator([{Email: mail}], 481395, 'Votre inscription à la newsletter Ititoca', {})
       sendNewsletterSubscriptionRequest.then((result) => {
-        res.status(204).json({})
+        return true
       })
       .catch((err) => {
         res.status(503).json({
           error: err
         })
+        return false
       })
+      res.status(204).json({})
+      return true
     })
     .catch(err => {
       console.log(err)
       res.status(503).json({
         error: err
       })
+      return false
     })
   }
 }
