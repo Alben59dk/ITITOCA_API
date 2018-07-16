@@ -2,12 +2,8 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const JWT_SECRET = require('../config').JWT_SECRET
 const crypto = require('crypto')
-
 const UserModel = require('../models/user')
-
-
-const mailjet = require('node-mailjet')
-  .connect('abdd9a68b3717531394e1e17a8d94622', '077b22d48be25b44d773eb3129e95b10')
+const mailjet = require('../mailjet')
 
 class UserController {
 
@@ -256,12 +252,11 @@ class UserController {
       .then(users => {
         if (users === null || users === undefined || users.length < 1) {
           return res.status(401).json({
-            error: 'Auth Failed : email not found'
+            error: 'Not user found with this email'
           })
         }
         let user = users[0]
         let newPassword = crypto.randomBytes(20).toString('hex').substring(15, 25)
-        console.log(newPassword)
         let salt = bcrypt.genSaltSync(11)
         let hash = bcrypt.hashSync(newPassword, salt)
         UserModel.findOneAndUpdate({ email: mail }, { password: hash }, (err, obj) => {
@@ -271,40 +266,17 @@ class UserController {
             })
           } else if (obj) {
             //Send email
-            const request = mailjet
-              .post('send', {'version': 'v3.1'})
-              .request({
-                'Messages': [
-                  {
-                    'From': {
-                      'Email': 'martin@lapilulerouge.io', // to be modified
-                      'Name': 'Ititoca' // to be modified
-                    },
-                    'To': [
-                      {
-                        'Email': obj.email,
-                        'Name': obj.pseudo
-                      }
-                    ],
-                    'TemplateID': 481379,
-                    'TemplateLanguage': true,
-                    'Subject': 'Votre demande de mot de passe Ititoca',
-                    'Variables': {
-                      'firstName': obj.pseudo,
-                      'password': newPassword
-                    }
-                  }
-                ]
+            const resetPasswordRequest = mailjet.sendRequestCreator([{Email: obj.email, Name: obj.pseudo}], 481379, 'Votre demande de mot de passe Ititoca', { firstName: obj.pseudo, password: newPassword})
+            resetPasswordRequest
+            .then((result) => {
+              res.status(204).json({})
+            })
+            .catch((err) => {
+              console.log(err)
+              res.status(503).json({
+                error: err
               })
-            request
-              .then((result) => {
-                console.log(result.body)
-              })
-              .catch((err) => {
-                console.log(err.statusCode)
-              })
-            console.log('Email sent to ' + mail)
-            res.status(204).json({})
+            })
           } else {
             res.status(400).json({
               error: 'error unknown'
@@ -314,36 +286,25 @@ class UserController {
       })
   }
 
-  static sendNews (mail, res) {
-    const request = mailjet
-      .post('send', {'version': 'v3.1'})
-      .request({
-        'Messages': [
-          {
-            'From': {
-              'Email': 'martin@lapilulerouge.io', // to be modified
-              'Name': 'Ititoca' // to be modified
-            },
-            'To': [
-              {
-                'Email': mail
-              }
-            ],
-            'TemplateID': 481395,
-            'TemplateLanguage': true,
-            'Subject': 'Ititoca : confirmation de votre inscription'
-          }
-        ]
-      })
-    request
-      .then((result) => {
-        console.log(result.body)
-        res.status(201).json({})
+  static newsletterSubscription (mail, res) {
+    const newsletterContactRequestCreator = mailjet.contactListRequestCreator(mail, 10280)
+    newsletterContactRequestCreator.then(result => {
+      const sendNewsletterSubscriptionRequest = mailjet.sendRequestCreator([{Email: mail}], 481395, 'Votre inscription à la newsletter Ititoca', {})
+      sendNewsletterSubscriptionRequest.then((result) => {
+        res.status(204).json({})
       })
       .catch((err) => {
-        console.log(err.statusCode)
-        res.status(503).json({})
+        res.status(503).json({
+          error: err
+        })
       })
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(503).json({
+        error: err
+      })
+    })
   }
 }
 
