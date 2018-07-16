@@ -5,7 +5,7 @@ const JWT_PERMISSIONS = require('express-jwt-permissions')({
   permissionsProperty: 'role'
 })
 
-const JWT_SECRET = '1T1T0C4_S3CR3T'
+const JWT_SECRET = process.env.SECRET
 
 const JWT_MIDDLEWARE = jwt({secret: JWT_SECRET})
 
@@ -15,7 +15,7 @@ function createUpload(dest) {
       cb(null, dest)
     },
     filename: function (req, file, cb) {
-      let name = crypto.createHash('md5').update(file.originalname).digest("hex");
+      let name = crypto.createHash('md5').update(file.originalname).digest('hex');
       cb(null, name + '-' + Date.now())
     }
   })
@@ -23,7 +23,7 @@ function createUpload(dest) {
   return multer({
     storage: storage,
     fileFilter: function(req, file, cb) {
-      if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+      if (!file.originalname.match(/\.(jpg|jpeg|png|svg)$/)) {
         return cb(new Error('Only image files are allowed!'));
       }
       cb(null, true);
