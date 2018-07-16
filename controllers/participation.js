@@ -41,7 +41,7 @@ class ParticipationController {
                     },
                     'To': [
                       {
-                        'Email': 'gregolouise@cuvox.de',
+                        'Email': 'gregolouise@hotmail.com',
                         'Name': 'passenger 1'
                       }
                     ],
@@ -49,15 +49,11 @@ class ParticipationController {
                     'TemplateLanguage': true,
                     'Subject': "Nouvelle contribution d'un utilisateur au challenge",
                     'Variables': {
-                      'firstName': req.user.userId,
-                      'challengeName': req.param.id,
+                      'firstName': req.user.email,
+                      'challengeName': req.body.title,
                       'challengeContribution': req.body.message
                     }
-                  }
-                ]
-              })
-              .request({
-                'Messages': [
+                  },
                   {
                     'From': {
                       'Email': 'martin@lapilulerouge.io', // to be modified
@@ -65,7 +61,7 @@ class ParticipationController {
                     },
                     'To': [
                       {
-                        'Email': 'passenger1@example.com',
+                        'Email': 'gregolouise@hotmail.com',
                         'Name': 'passenger 1'
                       }
                     ],
@@ -73,8 +69,8 @@ class ParticipationController {
                     'TemplateLanguage': true,
                     'Subject': 'Merci pour votre participation au challenge !',
                     'Variables': {
-                      'firstName': req.user.pseudo,
-                      'challengeName': ''
+                      'firstName': req.user.email,
+                      'challengeName': req.body.title
                     }
                   }
                 ]
