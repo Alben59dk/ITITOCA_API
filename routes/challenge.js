@@ -8,6 +8,16 @@ const ChallengeRouter = express.Router()
 
 const imageUpload = createUpload('public/images/challenges').single('image')
 
+ChallengeRouter.post('/invitefriends', (req, res) => {
+  if (req.body.mails) {
+    ChallengeController.inviteFriends(req, res)
+  } else {
+    res.status(400).json({
+      error: 'missing arguments'
+    })
+  }
+})
+
 // Modify one challenge
 ChallengeRouter.put('/:id([a-f\\d]{24})', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMINISTRATOR'), imageUpload, (req, res) => {
     ChallengeController.modifyOne(req, res)
