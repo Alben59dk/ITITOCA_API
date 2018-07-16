@@ -11,9 +11,9 @@ const categoryRouter = require('./routes/category')
 
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/ititoca')
+mongoose.connect(process.env.MONGODB_URI)
 
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
 }
 
@@ -30,6 +30,11 @@ app.use('/user', userRouter);
 app.use('/content', contentRouter)
 app.use('/category', categoryRouter)
 
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+})
+
 app.use(function (err, req, res, next) {
   if (err.code === 'permission_denied') {
     res.status(403).json({
@@ -39,22 +44,9 @@ app.use(function (err, req, res, next) {
     res.status(401).json({
       error: 'Unauthorized access'
     });
+  } else {
+    res.status(404).json({})
   }
 });
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-})
-
-// error handler
-// app.use(function(err, req, res, next) {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-//   // render the error page
-//   res.status(err.status || 500);
-//   res.render('error');
-// });
 
 module.exports = app;

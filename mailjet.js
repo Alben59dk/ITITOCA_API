@@ -1,5 +1,5 @@
 const mailjet = require('node-mailjet')
-const mailjetConnection = mailjet.connect('abdd9a68b3717531394e1e17a8d94622', '077b22d48be25b44d773eb3129e95b10')
+const mailjetConnection = mailjet.connect(process.env.MAILJET_USER, process.env.MAILJET_PASSWORD)
 
 exports.sendRequestCreator = function (dest, templateId, subject, variables) {
   const request = mailjetConnection
@@ -8,8 +8,8 @@ exports.sendRequestCreator = function (dest, templateId, subject, variables) {
     'Messages': [
       {
         'From': {
-          'Email': 'martin@lapilulerouge.io', // to be modified
-          'Name': 'Ititoca' // to be modified
+          'Email': process.env.MAILJET_SENDER_EMAIL, // to be modified
+          'Name': process.env.MAILJET_SENDER_NAME // to be modified
         },
         'To': dest,
         'TemplateID': templateId,
