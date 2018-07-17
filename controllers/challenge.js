@@ -1,9 +1,9 @@
 const ChallengeModel = require ('../models/challenge')
 const slug = require('slug')
 const fs = require('fs')
+const mailjet = require('../mailjet')
 
 class ChallengeController {
-
   static addNew(req, res) {
     let params = req.body
     let image = req.file
@@ -124,6 +124,29 @@ class ChallengeController {
         res.status(200).json([])
       }
     })
+  }
+
+  static inviteFriends (req, res) {
+    console.log(req.body)
+    for (let i = 0; i < req.body.mails.length; i++) {
+      let variablesMailjet =
+        {
+          'firstName': 'Ititoca',
+          'firstNameFriend': req.body.mails[i],
+          'challengeName': req.body.title
+        }
+      const sendInviteFriendsRequest = mailjet.sendRequestCreator([{Email: req.body.mails[i]}], 482273, 'Un ami vous a invité à participer à un challenge Ititoca', variablesMailjet)
+      sendInviteFriendsRequest.then((result) => {
+        return true
+      })
+        .catch((err) => {
+          res.status(503).json({
+            error: err
+          })
+          return false
+        })
+    }
+    res.sendStatus(204)
   }
 }
 

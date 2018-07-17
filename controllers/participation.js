@@ -41,7 +41,7 @@ class ParticipationController {
                     },
                     'To': [
                       {
-                        'Email': 'gregolouise@hotmail.com',
+                        'Email': 'bonjour@ititoca.com',
                         'Name': 'passenger 1'
                       }
                     ],
@@ -61,8 +61,8 @@ class ParticipationController {
                     },
                     'To': [
                       {
-                        'Email': 'gregolouise@hotmail.com',
-                        'Name': 'passenger 1'
+                        'Email': req.user.email,
+                        'Name': req.user.pseudo
                       }
                     ],
                     'TemplateID': 481418,

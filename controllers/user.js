@@ -296,18 +296,17 @@ class UserController {
               error: err.message
             })
           } else if (obj) {
-            //Send email
-            const resetPasswordRequest = mailjet.sendRequestCreator([{Email: obj.email, Name: obj.pseudo}], 481379, 'Votre demande de mot de passe Ititoca', { firstName: obj.pseudo, password: newPassword})
+            const resetPasswordRequest = mailjet.sendRequestCreator([{Email: obj.email, Name: obj.pseudo}], 481379, 'Votre demande de mot de passe Ititoca', { firstName: obj.pseudo, password: newPassword })
             resetPasswordRequest
-            .then((result) => {
-              res.status(204).json({})
-            })
-            .catch((err) => {
-              console.log(err)
-              res.status(503).json({
-                error: err
+              .then((result) => {
+                res.status(204).json({})
               })
-            })
+              .catch((err) => {
+                console.log(err)
+                res.status(503).json({
+                  error: err
+                })
+              })
           } else {
             res.status(400).json({
               error: 'error unknown'
@@ -324,22 +323,22 @@ class UserController {
       sendNewsletterSubscriptionRequest.then((result) => {
         return true
       })
-      .catch((err) => {
+        .catch((err) => {
+          res.status(503).json({
+            error: err
+          })
+          return false
+        })
+      res.status(204).json({})
+      return true
+    })
+      .catch(err => {
+        console.log(err)
         res.status(503).json({
           error: err
         })
         return false
       })
-      res.status(204).json({})
-      return true
-    })
-    .catch(err => {
-      console.log(err)
-      res.status(503).json({
-        error: err
-      })
-      return false
-    })
   }
 }
 
