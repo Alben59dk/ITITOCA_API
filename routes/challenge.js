@@ -53,6 +53,7 @@ ChallengeRouter.post('/:id([a-f\\d]{24})', JWT_MIDDLEWARE, JWT_PERMISSIONS.check
   }
 })
 
+// Get the three challenges of the month
 ChallengeRouter.get('/ofthemonth', (req, res) => {
   ChallengeController.getChallengeOfTheMonth(res)
 })

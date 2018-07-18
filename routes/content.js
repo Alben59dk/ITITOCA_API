@@ -35,10 +35,12 @@ ContentRouter.get('/published', (req, res) => {
   ContentController.publishedOnes(req, res)
 })
 
+// Get published contents filtered by category(ies)
 ContentRouter.get('/filter/:categoryId([a-f\\d]{24})/:timeId([a-f\\d]{24})*?', (req, res) => {
   ContentController.findFiltered(req, res)
 })
 
+// Get one content by its slug
 ContentRouter.get('/slug/:slug', (req, res) => {
   ContentController.findOneBySlug(req.params.slug, res)
 })

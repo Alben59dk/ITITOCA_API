@@ -79,11 +79,7 @@ UserRouter.post('/activate/:id([a-f\\d]{24})', JWT_MIDDLEWARE, JWT_PERMISSIONS.c
   UserController.activateOne(req.params.id, res)
 })
 
-//Delete User
-UserRouter.delete('/delete/:id([a-f\\d]{24})', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMINISTRATOR'), (req, res) => {
-  UserController.deleteOne(req.params.id, res)
-})
-
+// subscribe to the general newsletter
 UserRouter.post('/newsletter', (req, res) => {
   if (req.body.email) {
     UserController.newsletterSubscription(req.body.email, res)

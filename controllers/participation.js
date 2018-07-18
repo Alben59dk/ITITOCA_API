@@ -1,6 +1,5 @@
 const ParticipationModel = require('../models/participation')
-const mailjet = require('node-mailjet')
-  .connect('abdd9a68b3717531394e1e17a8d94622', '077b22d48be25b44d773eb3129e95b10')
+const mailjet = require('../mailjet')
 
 class ParticipationController {
   static addNew (req, res) {
@@ -29,65 +28,25 @@ class ParticipationController {
               error: errP.message
             })
           } else {
+            const newParticipationRequest = mailjet.sendRequestCreator([{Email: process.env.PARTICIPATION_MAIL_ADDR, Name: 'ITITOCA'}], 482271, 'Nouvelle contribution au challenge ' + obj.content_id.title, { firstName: req.user.pseudo, challengeName: obj.content_id.title, challengeContribution: req.body.message })
+            const participationThanksRequest = mailjet.sendRequestCreator([{Email: req.user.email, Name: req.user.pseudo}], 481418, 'Merci pour votre partage', { firstName: req.user.pseudo, challengeName: obj.content_id.title })
+            newParticipationRequest.then((result) => {
+              return true
+            })
+            .catch((err) => {
+              return false
+            })
+            participationThanksRequest.then((result) => {
+              return true
+            })
+            .catch((err) => {
+              return false
+            })
             res.status(201).json(obj)
-            const request = mailjet
-              .post('send', {'version': 'v3.1'})
-              .request({
-                'Messages': [
-                  {
-                    'From': {
-                      'Email': 'martin@lapilulerouge.io', // to be modified
-                      'Name': 'Ititoca' // to be modified
-                    },
-                    'To': [
-                      {
-                        'Email': 'bonjour@ititoca.com',
-                        'Name': 'passenger 1'
-                      }
-                    ],
-                    'TemplateID': 482271,
-                    'TemplateLanguage': true,
-                    'Subject': "Nouvelle contribution d'un utilisateur au challenge",
-                    'Variables': {
-                      'firstName': req.user.email,
-                      'challengeName': req.body.title,
-                      'challengeContribution': req.body.message
-                    }
-                  },
-                  {
-                    'From': {
-                      'Email': 'martin@lapilulerouge.io', // to be modified
-                      'Name': 'Ititoca' // to be modified
-                    },
-                    'To': [
-                      {
-                        'Email': req.user.email,
-                        'Name': req.user.pseudo
-                      }
-                    ],
-                    'TemplateID': 481418,
-                    'TemplateLanguage': true,
-                    'Subject': 'Merci pour votre participation au challenge !',
-                    'Variables': {
-                      'firstName': req.user.email,
-                      'challengeName': req.body.title
-                    }
-                  }
-                ]
-              })
-            request
-              .then((result) => {
-                console.log(result.body)
-              })
-              .catch((err) => {
-                console.log(err.statusCode)
-                console.log('marche pas');
-              })
           }
         })
       } else {
         res.status(204).json({})
-        console.log('nope')
       }
     })
   }

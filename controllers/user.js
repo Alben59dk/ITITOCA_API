@@ -164,38 +164,14 @@ class UserController {
           })
         }
       } else {
+        const welcomeRequest = mailjet.sendRequestCreator([{Email: user.email, Name: user.pseudo}], 479346, 'Bienvenue sur ITITOCA', { firstName: user.pseudo })
+        welcomeRequest.then((result) => {
+          return true
+        })
+        .catch((err) => {
+          return false
+        })
         res.status(200).json(user)
-        const request = mailjet
-          .post('send', {'version': 'v3.1'})
-          .request({
-            'Messages': [
-              {
-                'From': {
-                  'Email': 'martin@lapilulerouge.io', // to be modified
-                  'Name': 'Ititoca' // to be modified
-                },
-                'To': [
-                  {
-                    'Email': req.body.email,
-                    'Name': req.body.pseudo
-                  }
-                ],
-                'TemplateID': 479346,
-                'TemplateLanguage': true,
-                'Subject': 'Bienvenue chez nous',
-                'Variables': {
-                  'firstName': req.body.pseudo
-                }
-              }
-            ]
-          })
-        request
-          .then((result) => {
-            console.log(result.body)
-          })
-          .catch((err) => {
-            console.log(err.statusCode)
-          })
       }
     })
   }
@@ -260,18 +236,6 @@ class UserController {
       } else {
         res.status(204).json({})
       }
-    })
-  }
-
-  static deleteOne(id, res) {
-    UserModel.findByIdAndDelete(id, (err) => {
-      if (err) {
-        res.status(503).json({
-          error: err.message
-        })
-        return
-      }
-      res.status(204).json({})
     })
   }
 
