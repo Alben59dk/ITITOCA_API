@@ -19,7 +19,6 @@ class CategoryController {
     })
   }
 
-
   static addNew(params, image, res) {
     let category = new CategoryModel({
       name: params.name,

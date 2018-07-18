@@ -1,9 +1,9 @@
 const ChallengeModel = require ('../models/challenge')
 const slug = require('slug')
 const fs = require('fs')
+const mailjet = require('../mailjet')
 
 class ChallengeController {
-
   static addNew(req, res) {
     let params = req.body
     let image = req.file
@@ -61,11 +61,20 @@ class ChallengeController {
   }
 
   static modifyOne(req, res) {
-    let challenge = req.body
+    let challenge = {...req.body, categories: req.body.categories.split(',')}
     if (req.file !== undefined && req.file.path !== undefined && req.file.path.length > 0) {
+      fs.unlink(challenge.image, (errU) => {
+        if (errU) {
+          res.status(503).json({
+            error: errU.message
+          })
+        }
+        console.log(challenge.image + ' was deleted');
+      });
       challenge.image = req.file.path
     }
     challenge.technical_name = slug(challenge.title)
+    challenge.last_update_date = Date.now()
 
     ChallengeModel.findByIdAndUpdate(req.params.id, challenge,
         {new: true}, (err, doc) => {
@@ -124,6 +133,27 @@ class ChallengeController {
         res.status(200).json([])
       }
     })
+  }
+
+  static inviteFriends (req, res) {
+    for (let i = 0; i < req.body.mails.length; i++) {
+      let variablesMailjet =
+      {
+        'email': req.user.email,
+        'challengeName': req.body.title
+      }
+      const sendInviteFriendsRequest = mailjet.sendRequestCreator([{Email: req.body.mails[i]}], 482273, 'Un ami vous invite à participer au challenge Ititoca', variablesMailjet)
+      sendInviteFriendsRequest.then((result) => {
+        return true
+      })
+      .catch((err) => {
+        res.status(503).json({
+          error: err
+        })
+        return false
+      })
+    }
+    res.sendStatus(204)
   }
 }
 

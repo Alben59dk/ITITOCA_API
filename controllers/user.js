@@ -164,12 +164,19 @@ class UserController {
           })
         }
       } else {
+        const welcomeRequest = mailjet.sendRequestCreator([{Email: user.email, Name: user.pseudo}], 479346, 'Bienvenue sur ITITOCA', { firstName: user.pseudo })
+        welcomeRequest.then((result) => {
+          return true
+        })
+        .catch((err) => {
+          return false
+        })
         res.status(200).json(user)
       }
     })
   }
 
-  static addAdmin(req, res) {
+  static addAdmin (req, res) {
     let salt = bcrypt.genSaltSync(11)
     let hash = bcrypt.hashSync(req.body.password, salt)
     let newUser = new UserModel({
@@ -232,18 +239,6 @@ class UserController {
     })
   }
 
-  static deleteOne(id, res) {
-    UserModel.findByIdAndDelete(id, (err) => {
-      if (err) {
-        res.status(503).json({
-          error: err.message
-        })
-        return
-      }
-      res.status(204).json({})
-    })
-  }
-
   static resetPassword (mail, res) {
     UserModel.find({
       email: mail
@@ -265,18 +260,17 @@ class UserController {
               error: err.message
             })
           } else if (obj) {
-            //Send email
-            const resetPasswordRequest = mailjet.sendRequestCreator([{Email: obj.email, Name: obj.pseudo}], 481379, 'Votre demande de mot de passe Ititoca', { firstName: obj.pseudo, password: newPassword})
+            const resetPasswordRequest = mailjet.sendRequestCreator([{Email: obj.email, Name: obj.pseudo}], 481379, 'Votre demande de mot de passe Ititoca', { firstName: obj.pseudo, password: newPassword })
             resetPasswordRequest
-            .then((result) => {
-              res.status(204).json({})
-            })
-            .catch((err) => {
-              console.log(err)
-              res.status(503).json({
-                error: err
+              .then((result) => {
+                res.status(204).json({})
               })
-            })
+              .catch((err) => {
+                console.log(err)
+                res.status(503).json({
+                  error: err
+                })
+              })
           } else {
             res.status(400).json({
               error: 'error unknown'
@@ -293,22 +287,22 @@ class UserController {
       sendNewsletterSubscriptionRequest.then((result) => {
         return true
       })
-      .catch((err) => {
+        .catch((err) => {
+          res.status(503).json({
+            error: err
+          })
+          return false
+        })
+      res.status(204).json({})
+      return true
+    })
+      .catch(err => {
+        console.log(err)
         res.status(503).json({
           error: err
         })
         return false
       })
-      res.status(204).json({})
-      return true
-    })
-    .catch(err => {
-      console.log(err)
-      res.status(503).json({
-        error: err
-      })
-      return false
-    })
   }
 }
 
