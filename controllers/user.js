@@ -71,6 +71,7 @@ class UserController {
                   email: user[0].email,
                   userId: user[0]._id,
                   role: user[0].roles,
+                  pseudo: user[0].pseudo
                 },
                 JWT_SECRET
               )
