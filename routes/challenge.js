@@ -41,7 +41,6 @@ ChallengeRouter.post('/', JWT_MIDDLEWARE, JWT_PERMISSIONS.check('ADMINISTRATOR')
 
 // Add a new participation to one challenge
 ChallengeRouter.post('/:id([a-f\\d]{24})', JWT_MIDDLEWARE, JWT_PERMISSIONS.check([['ADMINISTRATOR'],['JUNIOR_CONTRIBUTOR'],['CONFIRMED_CONTRIBUTOR']]), (req, res) => {
-  console.log(req.body);
   if (req.body.type === 'PARTICIPATION') {
     if (req.body.message) {
       ParticipationController.addNew(req, res)
