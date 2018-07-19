@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "mocha"
+    "test": "mocha",
+    "fixture": "node fixtures/categories.js && node fixtures/users.js",
+    "postinstall": "mkdir -p public/images/categories && mkdir -p public/images/articles && mkdir -p public/images/challenges && npm run fixture"
   },
   "dependencies": {
     "bcrypt": "^2.0.1",
@@ -23,6 +25,7 @@
     "mongoose": "^5.1.4",
     "multer": "^1.3.0",
     "node-mailjet": "^3.2.1",
+    "node-mongoose-fixtures": "^0.3.0",
     "process": "^0.11.10",
     "slug": "^0.9.1"
   },
