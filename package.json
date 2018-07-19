@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "mocha"
+    "test": "mocha",
+    "fixture": "node fixtures/categories.js && node fixtures/users.js",
+    "postinstall": "mkdir -p public/images/categories && mkdir -p public/images/articles && mkdir -p public/images/challenges && npm run fixture"
   },
   "dependencies": {
     "bcrypt": "^2.0.1",
