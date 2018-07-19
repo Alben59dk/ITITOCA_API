@@ -23,7 +23,6 @@ let userSchema = new mongoose.Schema({
   },
   active: {
     type: Boolean,
-    required: true,
     default: true
   },
   created_date: {
