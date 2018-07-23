@@ -139,7 +139,6 @@ class ChallengeController {
     for (let i = 0; i < req.body.mails.length; i++) {
       let variablesMailjet =
       {
-        'email': req.user.email,
         'challengeName': req.body.title
       }
       const sendInviteFriendsRequest = mailjet.sendRequestCreator([{Email: req.body.mails[i]}], 482273, 'Un ami vous invite à participer au challenge Ititoca', variablesMailjet)
